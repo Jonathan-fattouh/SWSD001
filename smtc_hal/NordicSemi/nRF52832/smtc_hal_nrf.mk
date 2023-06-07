@@ -26,47 +26,22 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# Determine TARGET_MCU based on MCU_BOARD
-ifeq ($(MCU_BOARD), NUCLEO_L476RG)
-TARGET_MCU ?= STM32L476xx
-else ifeq ($(MCU_BOARD), ISP4520_EU)
-TARGET_MCU ?= nRF52832
-else
-$(error Invalid target board, please select a supported target board)
-endif
-
-# Determine the MCU mk file to include based on TARGET_MCU
-ifeq ($(TARGET_MCU),STM32L476xx)
-SMTC_HAL_MAKEFILE = $(TOP_DIR)/smtc_hal/STMicroelectronics/STM32L4xx/smtc_hal_l4.mk
-else ifeq ($(TARGET_MCU), nRF52832)
-SMTC_HAL_MAKEFILE = $(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/smtc_hal_nrf.mk
-else
-$(error Invalid target MCU, please select a supported target MCU)
-endif
-
-include $(SMTC_HAL_MAKEFILE)
-
-# include the target MCU mk file
-TARGET_MAKEFILE = $(TOP_DIR)/host_driver/target.mk
-include $(TARGET_MAKEFILE)
-
-# At this point both MCU_BOARD and TARGET_MCU are good. So we had their value to the defined preprocessor tokens
-
-C_DEFS +=  \
--D$(MCU_BOARD) \
--D$(TARGET_MCU)
+C_SOURCES +=  \
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_adc.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_i2c.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_flash.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_gpio.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_mcu.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_rtc.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_rng.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_spi.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_lp_timer.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_tmr_list.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_trace.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_uart.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/src/smtc_hal_watchdog.c\
+$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/smtc_modem_hal/smtc_modem_hal.c
 
 C_INCLUDES +=  \
--I$(TOP_DIR)/smtc_hal/inc/ \
--I$(TOP_DIR)/smtc_hal/board/
-
-# Add the macro debug trace definition
-ifeq ($(APP_TRACE),yes)
-C_DEFS += \
-    -DHAL_DBG_TRACE=1
-endif
-
-ifeq ($(APP_TRACE),no)
-C_DEFS += \
-    -DHAL_DBG_TRACE=0
-endif
+-I$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/inc \
+-I$(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/smtc_modem_hal/
