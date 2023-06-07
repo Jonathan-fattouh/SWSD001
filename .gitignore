@@ -55,3 +55,7 @@ dkms.conf
 *.ind
 *.lst
 *.bin
+*.uvoptx
+*.uvguix.*
+*.emSession
+*.jlink
