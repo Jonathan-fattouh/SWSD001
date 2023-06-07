@@ -1,5 +1,5 @@
 # --- The Clear BSD License ---
-# Copyright Semtech Corporation 2021. All rights reserved.
+# Copyright Semtech Corporation 2022. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted (subject to the limitations in the disclaimer
@@ -26,22 +26,27 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-C_SOURCES +=  \
-$(TOP_DIR)/shields/common/usr_button.c
-C_INCLUDES +=  \
--I$(TOP_DIR)/shields/interface \
--I$(TOP_DIR)/shields/common
-
 ifeq ($(RADIO_BOARD), ISP4520_EU)
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/ISP4520/isp4520.mk
-else ifneq (,$(findstring LR11,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/LR11XX/lr11xx.mk
-else ifneq (,$(findstring SX126,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/SX126X/sx126x.mk
-else ifneq (,$(findstring SX128,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/SX128X/sx128x.mk
+RADIO = sx1261
+else ifeq ($(RADIO_BOARD), ISP4520_AS)
+RADIO = sx1261
+else ifeq ($(RADIO_BOARD), ISP4520_US)
+RADIO = sx1262
 else
 $(error Invalid platform board, please select a supported platform board)
 endif
 
-include $(PLATFORM_BOARD_MAKEFILE)
+SMTC_SHIELD_SX126X_DIR = $(TOP_DIR)/shields/ISP4520
+SMTC_SHIELD_SX126X = $(RADIO_BOARD)
+
+include $(TOP_DIR)/shields/ISP4520/smtc_shield_sx126x/smtc_shield_sx126x.mk
+
+C_SOURCES +=  \
+$(TOP_DIR)/shields/ISP4520/radio_drivers_hal/sx126x_hal.c \
+$(TOP_DIR)/shields/ISP4520/common/src/ral_sx126x_bsp.c \
+$(TOP_DIR)/shields/ISP4520/common/src/smtc_board_sx126x.c \
+
+C_INCLUDES +=  \
+-I$(TOP_DIR)/shields/ISP4520/radio_drivers_hal \
+-I$(TOP_DIR)/shields/ISP4520/common/inc \
+-I$(LORA_BASICS_MODEM)/smtc_modem_core/radio_drivers/sx126x_driver/src

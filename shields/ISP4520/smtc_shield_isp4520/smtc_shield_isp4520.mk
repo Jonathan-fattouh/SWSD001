@@ -1,5 +1,5 @@
 # --- The Clear BSD License ---
-# Copyright Semtech Corporation 2021. All rights reserved.
+# Copyright Semtech Corporation 2022. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted (subject to the limitations in the disclaimer
@@ -26,22 +26,33 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-C_SOURCES +=  \
-$(TOP_DIR)/shields/common/usr_button.c
-C_INCLUDES +=  \
--I$(TOP_DIR)/shields/interface \
--I$(TOP_DIR)/shields/common
+define SMTC_SHIELD_SX126X_SUPPORTED_BODY
+Shield $(SMTC_SHIELD_SX126X) is not supported.
 
-ifeq ($(RADIO_BOARD), ISP4520_EU)
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/ISP4520/isp4520.mk
-else ifneq (,$(findstring LR11,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/LR11XX/lr11xx.mk
-else ifneq (,$(findstring SX126,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/SX126X/sx126x.mk
-else ifneq (,$(findstring SX128,$(RADIO_BOARD)))
-PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/SX128X/sx128x.mk
+The supported shields are:
+  * SX1261: ISP4520_EU / ISP4520_AS
+  * SX1262: ISP4520_US
+endef
+
+C_INCLUDES += \
+-I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/inc \
+
+C_SOURCES += \
+$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/src/smtc_shield_sx126x_ant_sw.c \
+$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/src/smtc_shield_sx126x_led.c \
+
+ifeq ($(SMTC_SHIELD_SX126X), ISP4520_EU)
+C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/src/smtc_shield_sx1261mb1cas.c
+C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/inc
+
+else ifeq ($(SMTC_SHIELD_SX126X), ISP4520_AS)
+C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/src/smtc_shield_sx1261mb1cas.c
+C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/inc
+
+else ifeq ($(SMTC_SHIELD_SX126X), ISP4520_US)
+C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1262MB2CAS/src/smtc_shield_sx1262mb2cas.c
+C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1262MB2CAS/inc
+
 else
-$(error Invalid platform board, please select a supported platform board)
+$(error $(SMTC_SHIELD_SX126X_SUPPORTED_BODY))
 endif
-
-include $(PLATFORM_BOARD_MAKEFILE)
