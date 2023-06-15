@@ -116,11 +116,6 @@ static void hal_mcu_pvd_config(void);
 
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
 /*!
- * @brief reinit the MCU clock tree after a stop mode
- */
-static void hal_mcu_system_clock_re_config_after_stop(void);
-
-/*!
  * @brief Deinit the MCU
  */
 static void hal_mcu_lpm_mcu_deinit(void);
@@ -227,15 +222,16 @@ void hal_mcu_reset(void) {
 void hal_mcu_wait_us(const int32_t microseconds) {
     nrf_delay_us(microseconds);
 }
-
+#include "smtc_modem_hal_dbg_trace.h" //TODO: for debug
 void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     bool last_sleep_loop = false;
 
     if (milliseconds <= 0) {
         return;
     }
-#if 0
-    CRITICAL_SECTION_BEGIN();
+
+    // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
+   // CRITICAL_SECTION_BEGIN();
 
     int32_t time_counter = milliseconds;
 
@@ -253,6 +249,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
             // if the sleep time is less than the wdog reload period, this is the last sleep loop
             last_sleep_loop = true;
         }
+         SMTC_MODEM_HAL_TRACE_INFO( "spin sleep\n" );         //TODO: for debug
         hal_mcu_sleep_handler();
 
 #if (HAL_USE_WATCHDOG == HAL_FEATURE_ON)
@@ -264,22 +261,8 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
         hal_rtc_wakeup_timer_stop();
     }
 
-    CRITICAL_SECTION_END();
-#else
-
-int32_t time_counter = milliseconds;
-    if ((time_counter > (WATCHDOG_RELOAD_PERIOD_SECONDS * 1000))) {
-            time_counter -= WATCHDOG_RELOAD_PERIOD_SECONDS * 1000;
-            hal_rtc_wakeup_timer_set_ms(WATCHDOG_RELOAD_PERIOD_SECONDS * 1000);
-        } else {
-            hal_rtc_wakeup_timer_set_ms(time_counter);
-            // if the sleep time is less than the wdog reload period, this is the last sleep loop
-            last_sleep_loop = true;
-        }
-//nrf_pwr_mgmt_run();
-__WFI();
-
-#endif
+     // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
+  //  CRITICAL_SECTION_END();
 }
 
 uint16_t hal_mcu_get_vref_level(void) { return hal_adc_get_vref_int(); }
@@ -395,9 +378,6 @@ static void hal_mcu_lpm_mcu_deinit(void) {
  *
  */
 static void hal_mcu_lpm_mcu_reinit(void) {
-    /* Reconfig needed OSC and PLL */
-    hal_mcu_system_clock_re_config_after_stop();
-
     /* Initialize UART */
 #if (HAL_USE_PRINTF_UART == HAL_FEATURE_ON)
     hal_uart_init(HAL_PRINTF_UART_ID, UART_TX, UART_RX);
@@ -407,39 +387,6 @@ static void hal_mcu_lpm_mcu_reinit(void) {
 
     /* Initialize SPI */
     hal_spi_init(HAL_RADIO_SPI_ID, SMTC_RADIO_SPI_MOSI, SMTC_RADIO_SPI_MISO, SMTC_RADIO_SPI_SCLK);
-}
-
-static void hal_mcu_system_clock_re_config_after_stop(void) {
-#if 0
-    RCC_ClkInitTypeDef rcc_clk_init_struct = { 0 };
-    RCC_OscInitTypeDef rcc_osc_init_struct = { 0 };
-    uint32_t           flash_latency       = 0;
-
-    /* Enable Power Control clock */
-    __HAL_RCC_PWR_CLK_ENABLE( );
-
-    /* Get the Oscillators configuration according to the internal RCC registers */
-    HAL_RCC_GetOscConfig( &rcc_osc_init_struct );
-
-    /* Enable PLL */
-    rcc_osc_init_struct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
-    rcc_osc_init_struct.PLL.PLLState   = RCC_PLL_ON;
-    if( HAL_RCC_OscConfig( &rcc_osc_init_struct ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-
-    /* Get the Clocks configuration according to the internal RCC registers */
-    HAL_RCC_GetClockConfig( &rcc_clk_init_struct, &flash_latency );
-
-    /* Select PLL as system clock source and keep HCLK, PCLK1 and PCLK2 clocks dividers as before */
-    rcc_clk_init_struct.ClockType    = RCC_CLOCKTYPE_SYSCLK;
-    rcc_clk_init_struct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    if( HAL_RCC_ClockConfig( &rcc_clk_init_struct, flash_latency ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-#endif
 }
 #endif
 
@@ -459,9 +406,8 @@ static void hal_mcu_lpm_enter_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if( lp_current_mode == LOW_POWER_ENABLE )
     {
-        hal_mcu_lpm_mcu_deinit( ); //TODO commment for test
-       // HAL_PWREx_EnterSTOP2Mode( PWR_STOPENTRY_WFI );
-       nrf_pwr_mgmt_run();
+      //  hal_mcu_lpm_mcu_deinit( ); //TODO commment for test
+        nrf_pwr_mgmt_run();
     }
     else
 #endif
@@ -478,7 +424,7 @@ static void hal_mcu_lpm_exit_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if (lp_current_mode == LOW_POWER_ENABLE) {
         /* Reinitializes the MCU */
-        hal_mcu_lpm_mcu_reinit(); //TODO comment for test
+      //  hal_mcu_lpm_mcu_reinit(); //TODO comment for test
     }
 #endif
 
@@ -493,17 +439,8 @@ static void hal_mcu_lpm_exit_sleep_mode(void) {
  *
  */
 static void hal_mcu_sleep_handler(void) {
-    // stop systick to avoid getting pending irq while going in stop mode
-    // Systick is automatically restart when going out of sleep
-   // HAL_SuspendTick( );
-
-    // If an interrupt has occurred after __disable_irq( ), it is kept pending
-    // and cortex will not enter low power anyway
-
     hal_mcu_lpm_enter_sleep_mode( );
     hal_mcu_lpm_exit_sleep_mode( );
-
-  //  HAL_ResumeTick( );
 }
 
 /**

@@ -128,11 +128,8 @@ void hal_uart_tx(const uint32_t id, uint8_t *buff, uint16_t len) {
     uint32_t local_id = id - 1;
 
     nrf_drv_uart_tx(&hal_uart[local_id].instance, (uint8_t *)buff, (uint8_t)len);
-
-    // while (uart_tx_done != true)
-    //;
-
-    // uart_tx_done = false;
+    NRF_UART0->EVENTS_CTS=0;
+    NRF_UART0->EVENTS_TXDRDY=0;
 }
 
 void hal_uart_rx(const uint32_t id, uint8_t *rx_buffer, uint16_t len) {
