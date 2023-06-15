@@ -77,10 +77,11 @@ typedef struct hal_spi_s {
 static hal_spi_t hal_spi[] = {
     [0] =
         {
-            .instance = NRF_DRV_SPI_INSTANCE(0),
+            .instance = NRF_DRV_SPI_INSTANCE(2),
             .config = {0},
         },
 };
+static volatile bool spi_xfer_done; /**< Flag used to indicate that SPI instance completed the transfer. */
 
 /*
  * -----------------------------------------------------------------------------
@@ -107,9 +108,11 @@ void hal_spi_init(const uint32_t id, const hal_gpio_pin_names_t mosi, const hal_
     hal_spi[local_id].config.mode = NRF_DRV_SPI_MODE_0;
     hal_spi[local_id].config.bit_order = NRF_DRV_SPI_BIT_ORDER_MSB_FIRST;
     hal_spi[local_id].config.orc = 0xFF;
+    hal_spi[local_id].config.irq_priority = SPI_DEFAULT_CONFIG_IRQ_PRIORITY;
     hal_spi[local_id].config.sck_pin = sclk;
     hal_spi[local_id].config.mosi_pin = mosi;
     hal_spi[local_id].config.miso_pin = miso;
+    hal_spi[local_id].config.ss_pin = NRFX_SPI_PIN_NOT_USED;
 
     if (nrf_drv_spi_init(&hal_spi[local_id].instance, &hal_spi[local_id].config, NULL, NULL) != NRF_SUCCESS) {
         mcu_panic();
@@ -126,12 +129,18 @@ void hal_spi_deinit(const uint32_t id) {
 uint16_t hal_spi_in_out(const uint32_t id, const uint16_t out_data) {
     assert_param((id > 0) && ((id - 1) < sizeof(hal_spi)));
     uint32_t local_id = id - 1;
-
     uint8_t in_data;
 
     if (nrf_drv_spi_transfer(&hal_spi[local_id].instance, (uint8_t *)&out_data, 1, (uint8_t *)&in_data, 1)) {
         mcu_panic();
     }
+
+    if (NRF_SPIM2->EVENTS_ENDRX)
+        NRF_SPIM2->EVENTS_ENDRX = 0;
+    if (NRF_SPIM2->EVENTS_ENDTX)
+        NRF_SPIM2->EVENTS_ENDTX = 0;
+    if (NRF_SPIM2->EVENTS_END)
+        NRF_SPIM2->EVENTS_END = 0;
 
     return (uint16_t)in_data;
 }
@@ -141,5 +150,8 @@ uint16_t hal_spi_in_out(const uint32_t id, const uint16_t out_data) {
  * --- PRIVATE FUNCTIONS DEFINITION ---------------------------------------------
  */
 
+void spi_event_handler(nrf_drv_spi_evt_t const *p_event, void *p_context) {
+    spi_xfer_done = true;
+}
 
 /* --- EOF ------------------------------------------------------------------ */
