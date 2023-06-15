@@ -67,7 +67,7 @@ extern "C" {
 /* HAL_FEATURE_ON to activate sleep mode */
 
 /* HAL_FEATURE_OFF to deactivate sleep mode */
-#define HAL_LOW_POWER_MODE HAL_FEATURE_ON
+#define HAL_LOW_POWER_MODE HAL_FEATURE_OFF //TODO LOWER_POWER_MODE is not working yet
 
 /* HAL_FEATURE_ON to enable debug probe, not disallocating corresponding pins */
 #define HAL_HW_DEBUG_PROBE HAL_FEATURE_OFF
