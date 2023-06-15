@@ -222,7 +222,7 @@ void hal_mcu_reset(void) {
 void hal_mcu_wait_us(const int32_t microseconds) {
     nrf_delay_us(microseconds);
 }
-#include "smtc_modem_hal_dbg_trace.h" //TODO: for debug
+
 void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     bool last_sleep_loop = false;
 
@@ -239,7 +239,6 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     hal_watchdog_reload();
 #endif // HAL_USE_WATCHDOG == HAL_FEATURE_ON
 
-
     do {
         if ((time_counter > (WATCHDOG_RELOAD_PERIOD_SECONDS * 1000))) {
             time_counter -= WATCHDOG_RELOAD_PERIOD_SECONDS * 1000;
@@ -249,7 +248,6 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
             // if the sleep time is less than the wdog reload period, this is the last sleep loop
             last_sleep_loop = true;
         }
-         SMTC_MODEM_HAL_TRACE_INFO( "spin sleep\n" );         //TODO: for debug
         hal_mcu_sleep_handler();
 
 #if (HAL_USE_WATCHDOG == HAL_FEATURE_ON)
@@ -258,7 +256,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     } while ((hal_rtc_has_wut_irq_happened() == true) && (last_sleep_loop == false));
     if (last_sleep_loop == false) {
         // in case sleep mode is interrupted by an other irq than the wake up timer, stop it and exit
-        hal_rtc_wakeup_timer_stop();
+     //   hal_rtc_wakeup_timer_stop(); //TODO cause infinite loop, why?
     }
 
      // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
