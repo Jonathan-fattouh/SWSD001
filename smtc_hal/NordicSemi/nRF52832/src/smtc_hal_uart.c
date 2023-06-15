@@ -102,7 +102,6 @@ void uart_event_handler(nrf_drv_uart_event_t *p_event, void *p_context);
  */
 
 void hal_uart_init(const uint32_t id, const hal_gpio_pin_names_t uart_tx, const hal_gpio_pin_names_t uart_rx) {
-
     assert_param((id > 0) && ((id - 1) < sizeof(hal_uart)));
     uint32_t local_id = id - 1;
 
@@ -117,7 +116,6 @@ void hal_uart_init(const uint32_t id, const hal_gpio_pin_names_t uart_tx, const 
 }
 
 void hal_uart_deinit(const uint32_t id) {
-
     assert_param((id > 0) && ((id - 1) < sizeof(hal_uart)));
     uint32_t local_id = id - 1;
 
@@ -130,11 +128,11 @@ void hal_uart_tx(const uint32_t id, uint8_t *buff, uint16_t len) {
     uint32_t local_id = id - 1;
 
     nrf_drv_uart_tx(&hal_uart[local_id].instance, (uint8_t *)buff, (uint8_t)len);
-        
-    //while (uart_tx_done != true)
+
+    // while (uart_tx_done != true)
     //;
 
-    //uart_tx_done = false;
+    // uart_tx_done = false;
 }
 
 void hal_uart_rx(const uint32_t id, uint8_t *rx_buffer, uint16_t len) {

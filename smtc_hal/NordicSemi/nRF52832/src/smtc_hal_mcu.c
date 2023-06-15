@@ -159,12 +159,12 @@ static void vprint(const char *fmt, va_list argp);
  */
 
 void hal_mcu_critical_section_begin(uint32_t *mask) {
- //   *mask = __get_PRIMASK();
- //   __disable_irq();
+    *mask = __get_PRIMASK();
+    __disable_irq();
 }
 
 void hal_mcu_critical_section_end(uint32_t *mask) {
-  //  __set_PRIMASK(*mask);
+    __set_PRIMASK(*mask);
 }
 
 void hal_mcu_disable_irq(void) {
@@ -217,47 +217,6 @@ void hal_mcu_init(void) {
 #if (HAL_USE_WATCHDOG == HAL_FEATURE_ON)
     hal_watchdog_init( );
 #endif // HAL_USE_WATCHDOG == HAL_FEATURE_ON
-
-#if 0
-    /* Initialize MCU HAL library */
-    HAL_Init( );
-
-    /* Initialize clocks */
-    hal_mcu_system_clock_config( );
-
-    /* Initialize GPIOs */
-    hal_mcu_gpio_init( );
-
-    /* Initialize UART */
-#if (HAL_USE_PRINTF_UART == HAL_FEATURE_ON)
-    hal_uart_init( HAL_PRINTF_UART_ID, UART_TX, UART_RX );
-#endif
-
-    /* Initialize low power timer */
-    hal_lp_timer_init( );
-
-    /* Initialize the user flash */
-    hal_flash_init( );
-
-    /* Init power voltage voltage detector */
-    hal_mcu_pvd_config( );
-
-    /* Initialize SPI */
-    hal_spi_init( HAL_RADIO_SPI_ID, SMTC_RADIO_SPI_MOSI, SMTC_RADIO_SPI_MISO, SMTC_RADIO_SPI_SCLK );
-
-    /* Initialize RTC */
-    hal_rtc_init( );
-
-    /* Initialize ADC */
-    hal_adc_init( );
-
-    // Initialize watchdog
-#if (HAL_USE_WATCHDOG == HAL_FEATURE_ON)
-    hal_watchdog_init( );
-#endif // HAL_USE_WATCHDOG == HAL_FEATURE_ON
-    /* Initialize I2C */
-    hal_i2c_init( HAL_I2C_ID, SMTC_I2C_SDA, SMTC_I2C_SCL );
-#endif
 }
 
 void hal_mcu_reset(void) {
@@ -275,6 +234,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     if (milliseconds <= 0) {
         return;
     }
+#if 0
     CRITICAL_SECTION_BEGIN();
 
     int32_t time_counter = milliseconds;
@@ -282,6 +242,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
 #if (HAL_USE_WATCHDOG == HAL_FEATURE_ON)
     hal_watchdog_reload();
 #endif // HAL_USE_WATCHDOG == HAL_FEATURE_ON
+
 
     do {
         if ((time_counter > (WATCHDOG_RELOAD_PERIOD_SECONDS * 1000))) {
@@ -302,7 +263,23 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
         // in case sleep mode is interrupted by an other irq than the wake up timer, stop it and exit
         hal_rtc_wakeup_timer_stop();
     }
+
     CRITICAL_SECTION_END();
+#else
+
+int32_t time_counter = milliseconds;
+    if ((time_counter > (WATCHDOG_RELOAD_PERIOD_SECONDS * 1000))) {
+            time_counter -= WATCHDOG_RELOAD_PERIOD_SECONDS * 1000;
+            hal_rtc_wakeup_timer_set_ms(WATCHDOG_RELOAD_PERIOD_SECONDS * 1000);
+        } else {
+            hal_rtc_wakeup_timer_set_ms(time_counter);
+            // if the sleep time is less than the wdog reload period, this is the last sleep loop
+            last_sleep_loop = true;
+        }
+//nrf_pwr_mgmt_run();
+__WFI();
+
+#endif
 }
 
 uint16_t hal_mcu_get_vref_level(void) { return hal_adc_get_vref_int(); }
@@ -367,6 +344,7 @@ static void hal_mcu_system_clock_config(void) {
 NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
 NRF_CLOCK->TASKS_LFCLKSTART = 1;
 while(NRF_CLOCK->EVENTS_LFCLKSTARTED == 0);
+NRF_CLOCK->EVENTS_LFCLKSTARTED=0;
 }
 
 static void hal_mcu_pvd_config(void) {
@@ -481,7 +459,7 @@ static void hal_mcu_lpm_enter_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if( lp_current_mode == LOW_POWER_ENABLE )
     {
-      //  hal_mcu_lpm_mcu_deinit( );
+        hal_mcu_lpm_mcu_deinit( ); //TODO commment for test
        // HAL_PWREx_EnterSTOP2Mode( PWR_STOPENTRY_WFI );
        nrf_pwr_mgmt_run();
     }
@@ -500,7 +478,7 @@ static void hal_mcu_lpm_exit_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if (lp_current_mode == LOW_POWER_ENABLE) {
         /* Reinitializes the MCU */
-    //    hal_mcu_lpm_mcu_reinit();
+        hal_mcu_lpm_mcu_reinit(); //TODO comment for test
     }
 #endif
 

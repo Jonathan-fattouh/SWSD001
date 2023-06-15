@@ -40,7 +40,7 @@
 #include <stdbool.h> // bool type
 #include <stdint.h>  // C99 types
 
-#include "nrf_drv_timer.h"
+#include "app_timer.h"
 #include "smtc_hal_lp_timer.h"
 #include "smtc_hal_mcu.h"
 
@@ -63,7 +63,7 @@
  * -----------------------------------------------------------------------------
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
-const nrf_drv_timer_t TIMER_INSTANCE = NRF_DRV_TIMER_INSTANCE(0);
+APP_TIMER_DEF(lp_timer);
 static hal_lp_timer_irq_t lptim_tmr_irq = {.context = NULL, .callback = NULL};
 
 /*
@@ -71,10 +71,12 @@ static hal_lp_timer_irq_t lptim_tmr_irq = {.context = NULL, .callback = NULL};
  * --- PRIVATE FUNCTIONS DECLARATION -------------------------------------------
  */
 
-/**
- * @brief Handler for timer events.
+/**@brief Function for handling the lp_timer timeout.
+ *
+ * @param[in] p_context  Pointer used for passing some arbitrary information (context) from the
+ *                       app_start_timer() call to the timeout handler.
  */
-void timer_event_handler(nrf_timer_event_t event_type, void *p_context);
+static void lp_timer_handler(void *p_context);
 
 /*
  * -----------------------------------------------------------------------------
@@ -82,36 +84,34 @@ void timer_event_handler(nrf_timer_event_t event_type, void *p_context);
  */
 
 void hal_lp_timer_init(void) {
-    nrf_drv_timer_config_t timer_cfg = NRF_DRV_TIMER_DEFAULT_CONFIG;
-    if (nrf_drv_timer_init(&TIMER_INSTANCE, &timer_cfg, timer_event_handler)) {
+    // Initialize timer module.
+    if ((app_timer_init() != NRF_SUCCESS)) {
         mcu_panic();
     }
-
+    // Create timers.
+    if (app_timer_create(&lp_timer, APP_TIMER_MODE_SINGLE_SHOT, lp_timer_handler) != NRF_SUCCESS) {
+        mcu_panic();
+    }
     lptim_tmr_irq = (hal_lp_timer_irq_t){.context = NULL, .callback = NULL};
 }
 
 void hal_lp_timer_start(const uint32_t milliseconds, const hal_lp_timer_irq_t *tmr_irq) {
-    uint32_t time_ticks;
-
-    time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER_INSTANCE, milliseconds);
-
-    nrf_drv_timer_compare(&TIMER_INSTANCE, NRF_TIMER_CC_CHANNEL0, time_ticks, true);
-
-    nrf_drv_timer_enable(&TIMER_INSTANCE);
+    app_timer_stop(lp_timer);
+    app_timer_start(lp_timer, APP_TIMER_TICKS(milliseconds), NULL);
 
     lptim_tmr_irq = *tmr_irq;
 }
 
 void hal_lp_timer_stop(void) {
-    nrf_drv_timer_disable(&TIMER_INSTANCE);
+     app_timer_stop(lp_timer);
 }
 
 void hal_lp_timer_irq_enable(void) {
-    NVIC_EnableIRQ(TIMER0_IRQn);
+    NVIC_EnableIRQ(RTC0_IRQn);
 }
 
 void hal_lp_timer_irq_disable(void) {
-    NVIC_DisableIRQ(TIMER0_IRQn);
+    NVIC_DisableIRQ(RTC0_IRQn);
 }
 
 /*
@@ -119,19 +119,9 @@ void hal_lp_timer_irq_disable(void) {
  * --- PRIVATE FUNCTIONS DEFINITION --------------------------------------------
  */
 
-void timer_event_handler(nrf_timer_event_t event_type, void *p_context) {
-    static uint32_t i;
-
-    switch (event_type) {
-    case NRF_TIMER_EVENT_COMPARE0:
-        if (lptim_tmr_irq.callback != NULL) {
-            lptim_tmr_irq.callback(lptim_tmr_irq.context);
-        }
-        break;
-
-    default:
-        // Do nothing.
-        break;
+static void lp_timer_handler(void *p_context) {
+    if (lptim_tmr_irq.callback != NULL) {
+        lptim_tmr_irq.callback(lptim_tmr_irq.context);
     }
 }
 
