@@ -62,7 +62,7 @@ extern "C" {
 #define UART_TX 6
 #define UART_RX 8
 
-#define USER_BUTTON PC_13
+#define USER_BUTTON 15
 
 /*
  * -----------------------------------------------------------------------------
