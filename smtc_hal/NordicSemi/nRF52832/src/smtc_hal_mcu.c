@@ -256,7 +256,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     } while ((hal_rtc_has_wut_irq_happened() == true) && (last_sleep_loop == false));
     if (last_sleep_loop == false) {
         // in case sleep mode is interrupted by an other irq than the wake up timer, stop it and exit
-     //   hal_rtc_wakeup_timer_stop(); //TODO cause infinite loop, why?
+        hal_rtc_wakeup_timer_stop(); //TODO cause infinite loop, why?
     }
 
      // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up

@@ -602,6 +602,10 @@ ret_code_t app_timer_stop(app_timer_t * p_timer)
 {
     ASSERT(p_timer);
     app_timer_t * p_t = (app_timer_t *) p_timer;
+
+    if (!p_t->active) {
+        return NRF_SUCCESS;
+    }
     p_t->active = false;
 
     return timer_req_schedule(TIMER_REQ_STOP, p_t);

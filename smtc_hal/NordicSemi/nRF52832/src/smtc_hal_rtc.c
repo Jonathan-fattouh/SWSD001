@@ -147,7 +147,7 @@ void hal_rtc_init(void) {
 
     hal_rtc_set_time_ref_in_ticks();
 }
-//#include "smtc_modem_hal_dbg_trace.h"
+
 uint32_t hal_rtc_get_time_s(void) {
     uint32_t seconds;
     uint32_t ticks;
@@ -196,7 +196,7 @@ void hal_rtc_stop_alarm(void) {
  * @param [in] timeout Duration of the Timer ticks
  */
 void hal_rtc_start_alarm(uint32_t timeout) {
-    //app_timer_stop(alarm_timer);
+    app_timer_stop(alarm_timer);
     app_timer_start(alarm_timer, timeout, NULL);
 }
 
@@ -225,14 +225,14 @@ void hal_rtc_wakeup_timer_set_s(const int32_t seconds) {
     int32_t milliseconds = seconds * 1000;
    /* reset irq status */
     wut_timer_irq_happened = false;
- //   app_timer_stop(wakeup_timer);
+    app_timer_stop(wakeup_timer);
     app_timer_start(wakeup_timer, APP_TIMER_TICKS(milliseconds), NULL);
 }
 
 void hal_rtc_wakeup_timer_set_ms(const int32_t milliseconds) {
     /* reset irq status */
     wut_timer_irq_happened = false;
-//    app_timer_stop(wakeup_timer);
+    app_timer_stop(wakeup_timer);
     app_timer_start(wakeup_timer, APP_TIMER_TICKS(milliseconds), NULL);
 }
 
