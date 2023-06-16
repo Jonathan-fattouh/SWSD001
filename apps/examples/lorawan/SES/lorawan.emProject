@@ -62,7 +62,7 @@
       <file file_name="$(StudioDir)/source/thumb_crt0.s" />
     </folder>
     <folder Name="board">
-      <file file_name="../../../../shields/ISP4520/common/src/smtc_board_sx126x.c" />
+      <file file_name="../../../../shields/ISP4520/common/src/smtc_board_isp4520.c" />
     </folder>
     <folder Name="lr1mac">
       <file file_name="../../../../lora_basics_modem/lora_basics_modem/smtc_modem_core/lr1mac/src/lr1_stack_mac_layer.c" />
@@ -169,7 +169,7 @@
       <file file_name="../../../../lora_basics_modem/lora_basics_modem/smtc_modem_core/radio_planner/src/radio_planner_hal.c" />
     </folder>
     <folder Name="radio_ral">
-      <file file_name="../../../../shields/ISP4520/common/src/ral_sx126x_bsp.c" />
+      <file file_name="../../../../shields/ISP4520/common/src/ral_isp4520_bsp.c" />
     </folder>
     <folder Name="shields">
       <file file_name="../../../../shields/ISP4520/smtc_shield_isp4520/common/src/smtc_shield_isp4520_ant_sw.c" />
