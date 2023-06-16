@@ -31,8 +31,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef SMTC_SHIELD_SX1261MB1CAS_H
-#define SMTC_SHIELD_SX1261MB1CAS_H
+#ifndef SMTC_SHIELD_ISP4520_EU_H
+#define SMTC_SHIELD_ISP4520_EU_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,9 +43,9 @@ extern "C" {
  * --- DEPENDENCIES ------------------------------------------------------------
  */
 
-#include "smtc_shield_sx126x_common_if.h"
-#include "smtc_shield_sx126x_led_if.h"
-#include "smtc_shield_sx126x_ant_sw_if.h"
+#include "smtc_shield_isp4520_common_if.h"
+#include "smtc_shield_isp4520_led_if.h"
+#include "smtc_shield_isp4520_ant_sw_if.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -71,4 +71,4 @@ extern "C" {
 }
 #endif
 
-#endif  // SMTC_SHIELD_SX1261MB1CAS_H
+#endif  // SMTC_SHIELD_ISP4520_EU_H

@@ -36,7 +36,7 @@
 
 #include "ral_sx126x_bsp.h"
 #include "smtc_board.h"
-#include "smtc_shield_sx126x_common_if.h"
+#include "smtc_shield_isp4520_common_if.h"
 
 /*
  * -----------------------------------------------------------------------------

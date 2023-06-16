@@ -38,7 +38,7 @@
  */
 
 #include <stddef.h>
-#include "smtc_shield_sx1261mb1cas.h"
+#include "smtc_shield_isp4520_eu.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -417,10 +417,6 @@ void smtc_shield_sx126x_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma )
 
 void smtc_shield_sx126x_init( void )
 {
-    smtc_shield_sx126x_init_ant_sw( );
-
-    smtc_shield_sx126x_set_ant_sw( );
-
     smtc_shield_sx126x_init_led_tx( );
     smtc_shield_sx126x_init_led_rx( );
 

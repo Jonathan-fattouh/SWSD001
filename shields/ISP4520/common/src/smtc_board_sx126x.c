@@ -43,7 +43,7 @@
 #include "ralf_sx126x.h"
 #include "sx126x_hal_context.h"
 #include "modem_pinout.h"
-#include "smtc_shield_sx126x_common_if.h"
+#include "smtc_shield_isp4520_common_if.h"
 
 /*
  * -----------------------------------------------------------------------------

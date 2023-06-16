@@ -56,27 +56,24 @@ extern "C" {
  */
 
 // Radio specific pinout and peripherals
-#define SMTC_RADIO_SPI_MOSI 26  // SPI pins
+#define SMTC_RADIO_SPI_MOSI 26 // SPI pins
 #define SMTC_RADIO_SPI_MISO 25
 #define SMTC_RADIO_SPI_SCLK 23
 #define SMTC_RADIO_NSS 24
 #define SMTC_RADIO_NRST 19
 
-#define SMTC_RADIO_DIOX 11  // Radio interrupt line
-#define SMTC_RADIO_BUSY 27  // Radio busy line
+#define SMTC_RADIO_DIOX 11 // Radio interrupt line
+#define SMTC_RADIO_BUSY 27 // Radio busy line
 
-//#define RADIO_LNA_CTRL ARDUINO_CONNECTOR_A3
 
 /* Sensors */
-//#define SMTC_I2C_SCL ARDUINO_CONNECTOR_D15
-//#define SMTC_I2C_SDA ARDUINO_CONNECTOR_D14
+// #define SMTC_I2C_SCL ARDUINO_CONNECTOR_D15
+// #define SMTC_I2C_SDA ARDUINO_CONNECTOR_D14
 
 /* LED */
-//#define SMTC_LED_RX ARDUINO_CONNECTOR_A5
-//#define SMTC_LED_TX ARDUINO_CONNECTOR_A4
-//#define SMTC_LED_SCAN ARDUINO_CONNECTOR_D4
-
-//#define SMTC_ANT_SW ARDUINO_CONNECTOR_D8
+// #define SMTC_LED_RX ARDUINO_CONNECTOR_A5
+// #define SMTC_LED_TX ARDUINO_CONNECTOR_A4
+// #define SMTC_LED_SCAN ARDUINO_CONNECTOR_D4
 
 /*
  * -----------------------------------------------------------------------------
@@ -92,4 +89,4 @@ extern "C" {
 }
 #endif
 
-#endif  // SMTC_PINOUT_H
+#endif // SMTC_PINOUT_H

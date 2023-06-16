@@ -53,17 +53,17 @@
 
 void smtc_shield_sx126x_init_ant_sw( )
 {
-  //  hal_gpio_init_out( SMTC_ANT_SW, HAL_GPIO_SET );
+    // No antenna switch control needed here
 }
 
 void smtc_shield_sx126x_set_ant_sw( void )
 {
- //   hal_gpio_set_value( SMTC_ANT_SW, HAL_GPIO_SET );
+    // No antenna switch control needed here
 }
 
 void smtc_shield_sx126x_reset_ant_sw( void )
 {
- //   hal_gpio_set_value( SMTC_ANT_SW, HAL_GPIO_RESET );
+    // No antenna switch control needed here
 }
 
 /*

@@ -62,7 +62,6 @@
 /* MCU Wake Up Time */
 #define MIN_ALARM_DELAY_IN_TICKS 3U // in ticks
 
-
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE TYPES -----------------------------------------------------------
@@ -154,8 +153,8 @@ uint32_t hal_rtc_get_time_s(void) {
 
     ticks = hal_rtc_get_timer_value();
 
-    uint64_t tmp=ticks*(APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    seconds = tmp/(uint64_t)APP_TIMER_CLOCK_FREQ;
+    uint64_t tmp = ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
+    seconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return seconds;
 }
@@ -166,8 +165,8 @@ uint32_t hal_rtc_get_time_100us(void) {
 
     ticks = hal_rtc_get_timer_value();
 
-    uint64_t tmp=10000*ticks*(APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    val_100us = tmp/(uint64_t)APP_TIMER_CLOCK_FREQ;
+    uint64_t tmp = 10000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
+    val_100us = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return val_100us;
 }
@@ -178,8 +177,8 @@ uint32_t hal_rtc_get_time_ms(void) {
 
     ticks = hal_rtc_get_timer_value();
 
-    uint64_t tmp=1000*ticks*(APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    milliseconds = tmp/(uint64_t)APP_TIMER_CLOCK_FREQ;
+    uint64_t tmp = 1000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
+    milliseconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return milliseconds;
 }
@@ -223,7 +222,7 @@ void hal_rtc_delay_in_ms(const uint32_t milliseconds) {
 
 void hal_rtc_wakeup_timer_set_s(const int32_t seconds) {
     int32_t milliseconds = seconds * 1000;
-   /* reset irq status */
+    /* reset irq status */
     wut_timer_irq_happened = false;
     app_timer_stop(wakeup_timer);
     app_timer_start(wakeup_timer, APP_TIMER_TICKS(milliseconds), NULL);
@@ -271,18 +270,18 @@ uint32_t hal_rtc_ms_2_tick(const uint32_t milliseconds) {
 }
 
 uint32_t hal_rtc_tick_2_100_us(const uint32_t tick) {
-   // return APP_TIMER_100US(tick);
-    uint64_t tmp=tick*(APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    tmp = tmp/(uint64_t)APP_TIMER_CLOCK_FREQ;
-    tmp*=10000;
+    // return APP_TIMER_100US(tick);
+    uint64_t tmp = tick * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
+    tmp = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
+    tmp *= 10000;
     return (uint32_t)tmp;
 }
 
 uint32_t hal_rtc_tick_2_ms(const uint32_t tick) {
-    //return APP_TIMER_MS(tick);
-    uint64_t tmp=tick*(APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    tmp = tmp/(uint64_t)APP_TIMER_CLOCK_FREQ;
-    tmp*=1000;
+    // return APP_TIMER_MS(tick);
+    uint64_t tmp = tick * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
+    tmp = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
+    tmp *= 1000;
     return (uint32_t)tmp;
 }
 
