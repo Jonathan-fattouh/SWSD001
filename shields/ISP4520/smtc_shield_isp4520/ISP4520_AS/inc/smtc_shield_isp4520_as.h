@@ -1,7 +1,7 @@
 /*!
- * @file      smtc_shield_sx1262mb1cbs.c
+ * @file      smtc_shield_sx1261mb1cas.c
  *
- * @brief     Interface specific to SX1262MB1CBS shield
+ * @brief     Interface specific to SX1261MB1CAS shield
  *
  * The Clear BSD License
  * Copyright Semtech Corporation 2022. All rights reserved.
@@ -31,8 +31,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef SMTC_SHIELD_SX1262MB1CBS_H
-#define SMTC_SHIELD_SX1262MB1CBS_H
+#ifndef SMTC_SHIELD_ISP4520_AS_H
+#define SMTC_SHIELD_ISP4520_AS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,9 +43,9 @@ extern "C" {
  * --- DEPENDENCIES ------------------------------------------------------------
  */
 
-#include "smtc_shield_sx126x_common_if.h"
-#include "smtc_shield_sx126x_led_if.h"
-#include "smtc_shield_sx126x_ant_sw_if.h"
+#include "smtc_shield_isp4520_common_if.h"
+#include "smtc_shield_isp4520_led_if.h"
+#include "smtc_shield_isp4520_ant_sw_if.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -71,4 +71,4 @@ extern "C" {
 }
 #endif
 
-#endif  // SMTC_SHIELD_SX1262MB1CBS_H
+#endif  // SMTC_SHIELD_ISP4520_AS_H

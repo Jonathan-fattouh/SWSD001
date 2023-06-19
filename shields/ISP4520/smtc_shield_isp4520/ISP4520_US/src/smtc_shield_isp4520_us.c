@@ -1,7 +1,7 @@
 /*!
- * @file      smtc_shield_sx1261mb1cas.c
+ * @file      smtc_shield_sx1262mb1cbs.c
  *
- * @brief     Implementation specific to SX1261MB1CAS shield
+ * @brief     Implementation specific to SX1262MB1CBS shield
  *
  * The Clear BSD License
  * Copyright Semtech Corporation 2022. All rights reserved.
@@ -38,315 +38,311 @@
  */
 
 #include <stddef.h>
-#include "smtc_shield_isp4520_eu.h"
+#include "smtc_shield_isp4520_us.h"
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define ISP4520_EU_SUBGHZ_FREQ_MIN 150000000
-#define ISP4520_EU_SUBGHZ_FREQ_MAX 960000000
+#define ISP4520_US_SUBGHZ_FREQ_MIN 150000000
+#define ISP4520_US_SUBGHZ_FREQ_MAX 960000000
 
-#define ISP4520_EU_MIN_PWR -17
-#define ISP4520_EU_MAX_PWR 15
+#define ISP4520_US_MIN_PWR -9
+#define ISP4520_US_MAX_PWR 22
+
+/*
+ * -----------------------------------------------------------------------------
+ * --- PRIVATE CONSTANTS -------------------------------------------------------
+ */
 
 // PA config table
-const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_EU_MAX_PWR - ISP4520_EU_MIN_PWR + 1] = {
-    {  // Expected output power = -17dBm
-        .power = -15,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -16dBm
-        .power = -13,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -15dBm
-        .power = -12,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -14dBm
-        .power = -12,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -13dBm
-        .power = -12,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -12dBm
-        .power = -10,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    { // Expected output power = -11dBm
-        .power = -10,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x04,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    { // Expected output power = -10dBm
-        .power = -7,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
+const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_US_MAX_PWR - ISP4520_US_MIN_PWR + 1] = {
     { // Expected output power = -9dBm
-        .power = -8,
+        .power = 2,
         .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -8dBm
-        .power = -7,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -7dBm
-        .power = -5,
-        .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -6dBm
-        .power = -4,
+    { // Expected output power = -8dBm
+        .power = 5,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -7dBm
+        .power = 5,
+        .pa_config = {
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -5dBm
-        .power = -3,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -4dBm
-        .power = 0,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -3dBm
-        .power = 0,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -2dBm
-        .power = 0,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -1dBm
-        .power = 3,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 0dBm
-        .power = 3,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 1dBm
-        .power = 4,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 2dBm
-        .power = 6,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 3dBm
-        .power = 6,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 4dBm
+    { // Expected output power = -6dBm
         .power = 7,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 5dBm
-        .power = 8,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 6dBm
+    { // Expected output power = -5dBm
         .power = 9,
         .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 7dBm
+    { // Expected output power = -4dBm
         .power = 10,
         .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 8dBm
+    { // Expected output power = -3dBm
+        .power = 11,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -2dBm
         .power = 13,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 9dBm
-        .power = 14,
+    { // Expected output power = -1dBm
+        .power = 19,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 10dBm
-        .power = 13,
+    { // Expected output power = 0dBm
+        .power = 17,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-     },
-    {// Expected output power = 11dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 12dBm
-        .power = 14,
+    { // Expected output power = 1dBm
+        .power = 16,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 2dBm
+        .power = 20,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 3dBm
+        .power = 20,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 4dBm
+        .power = 16,
+        .pa_config = {
+            .hp_max        = 0x02,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 5dBm
+        .power = 21,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 6dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 7dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 8dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 13dBm
-        .power = 14,
+    { // Expected output power = 9dBm
+        .power = 22,
         .pa_config = {
-            .hp_max        = 0x00,
+            .hp_max        = 0x01,
+            .pa_duty_cycle = 0x03,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 10dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x01,
             .pa_duty_cycle = 0x04,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-     },
-    {// Expected output power = 14dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x05,
-            .device_sel    = 0x01,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 15dBm
-        .power = 14,
+    { // Expected output power = 11dBm
+        .power = 22,
         .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x07,
-            .device_sel    = 0x01,
+            .hp_max        = 0x02,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 12dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x02,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 13dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x02,
+            .pa_duty_cycle = 0x02,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 14dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x02,
+            .pa_duty_cycle = 0x03,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 15dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x03,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 16dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x03,
+            .pa_duty_cycle = 0x02,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 17dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x05,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 18dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x07,
+            .pa_duty_cycle = 0x00,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 19dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x06,
+            .pa_duty_cycle = 0x01,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 20dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x07,
+            .pa_duty_cycle = 0x02,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 21dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x06,
+            .pa_duty_cycle = 0x04,
+            .device_sel    = 0x00,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 22dBm
+        .power = 22,
+        .pa_config = {
+            .hp_max        = 0x07,
+            .pa_duty_cycle = 0x04,
+            .device_sel    = 0x00,
             .pa_lut        = 0x01,
         },
     },
@@ -378,14 +374,14 @@ const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_EU_MAX_PWR - ISP4520_
  */
 
 const smtc_shield_sx126x_pa_pwr_cfg_t* smtc_shield_sx126x_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
-                                                                          int8_t         expected_output_pwr_in_dbm )
+                                                                          const int8_t   expected_output_pwr_in_dbm )
 {
-    if( ( ISP4520_EU_SUBGHZ_FREQ_MIN <= rf_freq_in_hz ) && ( rf_freq_in_hz <= ISP4520_EU_SUBGHZ_FREQ_MAX ) )
+    if( ( ISP4520_US_SUBGHZ_FREQ_MIN <= rf_freq_in_hz ) && ( rf_freq_in_hz <= ISP4520_US_SUBGHZ_FREQ_MAX ) )
     {
-        if( ( ISP4520_EU_MIN_PWR <= expected_output_pwr_in_dbm ) &&
-            ( expected_output_pwr_in_dbm <= ISP4520_EU_MAX_PWR ) )
+        if( ( ISP4520_US_MIN_PWR <= expected_output_pwr_in_dbm ) &&
+            ( expected_output_pwr_in_dbm <= ISP4520_US_MAX_PWR ) )
         {
-            return &( pa_cfg_table[expected_output_pwr_in_dbm - ISP4520_EU_MIN_PWR] );
+            return &( pa_cfg_table[expected_output_pwr_in_dbm - ISP4520_US_MIN_PWR] );
         }
     }
 
@@ -399,15 +395,15 @@ bool smtc_shield_sx126x_is_dio2_set_as_rf_switch( void )
 
 sx126x_reg_mod_t smtc_shield_sx126x_get_reg_mode( void )
 {
-    return SX126X_REG_MODE_DCDC;
+    return SX126X_REG_MODE_LDO;
 }
 
 void smtc_shield_sx126x_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcxo_ctrl_voltages_t* supply_voltage,
                                       uint32_t* startup_time_in_tick )
 {
     *tcxo_is_radio_controlled = true;
-    *supply_voltage           = SX126X_TCXO_CTRL_1_8V;
-    *startup_time_in_tick     = 128;//300;
+    *supply_voltage           = SX126X_TCXO_CTRL_3_0V;
+    *startup_time_in_tick     = 300;
 }
 
 void smtc_shield_sx126x_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma )
@@ -417,6 +413,10 @@ void smtc_shield_sx126x_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma )
 
 void smtc_shield_sx126x_init( void )
 {
+    smtc_shield_sx126x_init_ant_sw( );
+
+    smtc_shield_sx126x_set_ant_sw( );
+
     smtc_shield_sx126x_init_led_tx( );
     smtc_shield_sx126x_init_led_rx( );
 
