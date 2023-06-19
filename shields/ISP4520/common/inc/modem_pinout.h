@@ -56,14 +56,14 @@ extern "C" {
  */
 
 // Radio specific pinout and peripherals
-#define SMTC_RADIO_SPI_MOSI 26 // SPI pins
-#define SMTC_RADIO_SPI_MISO 25
-#define SMTC_RADIO_SPI_SCLK 23
-#define SMTC_RADIO_NSS 24
-#define SMTC_RADIO_NRST 19
+#define SMTC_RADIO_SPI_MOSI P0_26 // SPI pins
+#define SMTC_RADIO_SPI_MISO P0_25
+#define SMTC_RADIO_SPI_SCLK P0_23
+#define SMTC_RADIO_NSS P0_24
+#define SMTC_RADIO_NRST P0_19
 
-#define SMTC_RADIO_DIOX 11 // Radio interrupt line
-#define SMTC_RADIO_BUSY 27 // Radio busy line
+#define SMTC_RADIO_DIOX P0_11 // Radio interrupt line
+#define SMTC_RADIO_BUSY P0_27 // Radio busy line
 
 
 /* Sensors */

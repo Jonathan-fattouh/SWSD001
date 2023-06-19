@@ -59,10 +59,10 @@ extern "C" {
 #define HAL_RADIO_SPI_ID 1
 #define HAL_I2C_ID 1
 
-#define UART_TX 6
-#define UART_RX 8
+#define UART_TX P0_06
+#define UART_RX P0_08
 
-#define USER_BUTTON 15
+#define USER_BUTTON P0_15
 
 /*
  * -----------------------------------------------------------------------------

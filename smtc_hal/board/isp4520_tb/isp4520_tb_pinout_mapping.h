@@ -51,29 +51,37 @@ extern "C" {
  * --- PUBLIC MACROS -----------------------------------------------------------
  */
 
-#define ARDUINO_CONNECTOR_D0 PA_3
-#define ARDUINO_CONNECTOR_D1 PA_2
-#define ARDUINO_CONNECTOR_D2 PA_10
-#define ARDUINO_CONNECTOR_D3 PB_3
-#define ARDUINO_CONNECTOR_D4 PB_5
-#define ARDUINO_CONNECTOR_D5 PB_4
-#define ARDUINO_CONNECTOR_D6 PB_10
-#define ARDUINO_CONNECTOR_D7 PA_8
-#define ARDUINO_CONNECTOR_D8 PA_9
-#define ARDUINO_CONNECTOR_D9 PC_7
-#define ARDUINO_CONNECTOR_D10 PB_6
-#define ARDUINO_CONNECTOR_D11 PA_7
-#define ARDUINO_CONNECTOR_D12 PA_6
-#define ARDUINO_CONNECTOR_D13 PA_5
-#define ARDUINO_CONNECTOR_D14 PB_9
-#define ARDUINO_CONNECTOR_D15 PB_8
+#define P0_02 2
+#define P0_03 3
+#define P0_04 4
+#define P0_05 5
+#define P0_06 6
+#define P0_07 7
+#define P0_08 8
+#define P0_09 9
+#define P0_10 10
+#define P0_11 11
+#define P0_12 12
+#define P0_13 13
+#define P0_14 14
+#define P0_15 15
+#define P0_16 16
+#define P0_17 17
+#define P0_18 18
+#define P0_19 19
+#define P0_20 20
+#define P0_21 21
+#define P0_22 22
+#define P0_23 23
+#define P0_24 24
+#define P0_25 25
+#define P0_26 26
+#define P0_27 27
+#define P0_28 28
+#define P0_29 29
+#define P0_30 30
+#define P0_31 31
 
-#define ARDUINO_CONNECTOR_A0 PA_0
-#define ARDUINO_CONNECTOR_A1 PA_1
-#define ARDUINO_CONNECTOR_A2 PA_4
-#define ARDUINO_CONNECTOR_A3 PB_0
-#define ARDUINO_CONNECTOR_A4 PC_1
-#define ARDUINO_CONNECTOR_A5 PC_0
 
 #ifdef __cplusplus
 }
