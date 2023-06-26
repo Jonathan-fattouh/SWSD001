@@ -36,7 +36,7 @@
  * -----------------------------------------------------------------------------
  * --- DEPENDENCIES ------------------------------------------------------------
  */
-//#include "stm32l4xx_hal.h"
+
 #include "smtc_hal.h"
 
 /*
@@ -54,57 +54,12 @@
  * --- PRIVATE TYPES -----------------------------------------------------------
  */
 /*
-typedef struct hal_i2c_s
-{
-    I2C_TypeDef*      interface;
-    I2C_HandleTypeDef handle;
-    struct
-    {
-        hal_gpio_pin_names_t sda;
-        hal_gpio_pin_names_t scl;
-    } pins;
-} hal_i2c_t;
-*/
+
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
- /*
-static hal_i2c_t hal_i2c[] = {
-    [0] =
-        {
-            .interface = I2C1,
-            .handle    = { NULL },
-            .pins =
-                {
-                    .sda = NC,
-                    .scl = NC,
-                },
-        },
-    [1] =
-        {
-            .interface = I2C2,
-            .handle    = { NULL },
-            .pins =
-                {
-                    .sda = NC,
-                    .scl = NC,
-                },
-        },
-    [2] =
-        {
-            .interface = I2C3,
-            .handle    = { NULL },
-            .pins =
-                {
-                    .sda = NC,
-                    .scl = NC,
-                },
-        },
-};*/
-
-static i2c_addr_size i2c_internal_addr_size;
-
+ 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE FUNCTIONS DECLARATION -------------------------------------------
@@ -144,130 +99,14 @@ static uint8_t i2c_read_buffer( const uint32_t id, uint8_t device_addr, uint16_t
 
 void hal_i2c_init( const uint32_t id, const hal_gpio_pin_names_t sda, const hal_gpio_pin_names_t scl )
 {
-#if 0
-    assert_param( ( id > 0 ) && ( ( id - 1 ) < sizeof( hal_i2c ) ) );
-    uint32_t local_id = id - 1;
-
-    hal_i2c[local_id].handle.Instance              = hal_i2c[local_id].interface;
-    hal_i2c[local_id].handle.Init.Timing           = 0x10909CEC;
-    hal_i2c[local_id].handle.Init.OwnAddress1      = 0;
-    hal_i2c[local_id].handle.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
-    hal_i2c[local_id].handle.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
-    hal_i2c[local_id].handle.Init.OwnAddress2      = 0;
-    hal_i2c[local_id].handle.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
-    hal_i2c[local_id].handle.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
-    hal_i2c[local_id].handle.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
-
-    hal_i2c[local_id].pins.sda = sda;
-    hal_i2c[local_id].pins.scl = scl;
-
-    if( HAL_I2C_Init( &hal_i2c[local_id].handle ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-
-    /**Configure Analogue filter
-     */
-    if( HAL_I2CEx_ConfigAnalogFilter( &hal_i2c[local_id].handle, I2C_ANALOGFILTER_ENABLE ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-
-    /**Configure Digital filter
-     */
-    if( HAL_I2CEx_ConfigDigitalFilter( &hal_i2c[local_id].handle, 0 ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-#endif
+    // Not implemented
 }
 
 void hal_i2c_deinit( const uint32_t id )
 {
-#if 0
-    assert_param( ( id > 0 ) && ( ( id - 1 ) < sizeof( hal_i2c ) ) );
-    uint32_t local_id = id - 1;
-
-    HAL_I2C_DeInit( &hal_i2c[local_id].handle );
-#endif
-}
-#if 0
-void HAL_I2C_MspInit( I2C_HandleTypeDef* i2cHandle )
-{
-    if( i2cHandle->Instance == hal_i2c[0].interface )
-    {
-        GPIO_TypeDef*    gpio_port = ( GPIO_TypeDef* ) ( AHB2PERIPH_BASE + ( ( hal_i2c[0].pins.sda & 0xF0 ) << 6 ) );
-        GPIO_InitTypeDef gpio      = {
-            .Mode  = GPIO_MODE_AF_OD,
-            .Pull  = GPIO_PULLUP,  // Pull UP instead of no pull because pull resistors are not mounter on the shield
-            .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
-            .Alternate = GPIO_AF4_I2C1,
-        };
-        gpio.Pin = ( 1 << ( hal_i2c[0].pins.scl & 0x0F ) ) | ( 1 << ( hal_i2c[0].pins.sda & 0x0F ) );
-        HAL_GPIO_Init( gpio_port, &gpio );
-
-        __HAL_RCC_I2C1_CLK_ENABLE( );
-    }
-    else if( i2cHandle->Instance == hal_i2c[1].interface )
-    {
-        GPIO_TypeDef*    gpio_port = ( GPIO_TypeDef* ) ( AHB2PERIPH_BASE + ( ( hal_i2c[1].pins.sda & 0xF0 ) << 6 ) );
-        GPIO_InitTypeDef gpio      = {
-            .Mode      = GPIO_MODE_AF_OD,
-            .Pull      = GPIO_NOPULL,
-            .Speed     = GPIO_SPEED_FREQ_VERY_HIGH,
-            .Alternate = GPIO_AF4_I2C2,
-        };
-        gpio.Pin = ( 1 << ( hal_i2c[1].pins.scl & 0x0F ) ) | ( 1 << ( hal_i2c[1].pins.sda & 0x0F ) );
-        HAL_GPIO_Init( gpio_port, &gpio );
-
-        __HAL_RCC_I2C2_CLK_ENABLE( );
-    }
-    else if( i2cHandle->Instance == hal_i2c[2].interface )
-    {
-        GPIO_TypeDef*    gpio_port = ( GPIO_TypeDef* ) ( AHB2PERIPH_BASE + ( ( hal_i2c[2].pins.sda & 0xF0 ) << 6 ) );
-        GPIO_InitTypeDef gpio      = {
-            .Mode      = GPIO_MODE_AF_OD,
-            .Pull      = GPIO_NOPULL,
-            .Speed     = GPIO_SPEED_FREQ_VERY_HIGH,
-            .Alternate = GPIO_AF4_I2C3,
-        };
-        gpio.Pin = ( 1 << ( hal_i2c[2].pins.scl & 0x0F ) ) | ( 1 << ( hal_i2c[2].pins.sda & 0x0F ) );
-        HAL_GPIO_Init( gpio_port, &gpio );
-
-        __HAL_RCC_I2C3_CLK_ENABLE( );
-    }
-    else
-    {
-        mcu_panic( );
-    }
+    // Not implemented
 }
 
-void HAL_I2C_MspDeInit( I2C_HandleTypeDef* i2cHandle )
-{
-    uint32_t local_id = 0;
-    if( i2cHandle->Instance == hal_i2c[0].interface )
-    {
-        local_id = 0;
-        __HAL_RCC_I2C1_FORCE_RESET( );
-        __HAL_RCC_I2C1_RELEASE_RESET( );
-        __HAL_RCC_I2C1_CLK_DISABLE( );
-    }
-    else if( i2cHandle->Instance == hal_i2c[2].interface )
-    {
-        local_id = 2;
-        __HAL_RCC_I2C3_FORCE_RESET( );
-        __HAL_RCC_I2C3_RELEASE_RESET( );
-        __HAL_RCC_I2C3_CLK_DISABLE( );
-    }
-    else
-    {
-        mcu_panic( );
-    }
-
-    HAL_GPIO_DeInit( ( GPIO_TypeDef* ) ( AHB2PERIPH_BASE + ( ( hal_i2c[local_id].pins.sda & 0xF0 ) << 6 ) ),
-                     ( 1 << ( hal_i2c[local_id].pins.sda & 0x0F ) ) | ( 1 << ( hal_i2c[local_id].pins.scl & 0x0F ) ) );
-}
-#endif
 uint8_t hal_i2c_write( const uint32_t id, uint8_t device_addr, uint16_t addr, uint8_t data )
 {
     if( i2c_write_buffer( id, device_addr, addr, &data, 1u ) == SMTC_HAL_FAILURE )
@@ -318,7 +157,7 @@ uint8_t hal_i2c_read_buffer( const uint32_t id, uint8_t device_addr, uint16_t ad
     return ( i2c_read_buffer( id, device_addr, addr, buffer, size ) );
 }
 
-void i2c_set_addr_size( i2c_addr_size addr_size ) { i2c_internal_addr_size = addr_size; }
+//void i2c_set_addr_size( i2c_addr_size addr_size ) { i2c_internal_addr_size = addr_size; }
 
 /*
  * -----------------------------------------------------------------------------
@@ -327,55 +166,12 @@ void i2c_set_addr_size( i2c_addr_size addr_size ) { i2c_internal_addr_size = add
 
 static uint8_t i2c_write_buffer( const uint32_t id, uint8_t device_addr, uint16_t addr, uint8_t* buffer, uint16_t size )
 {
-#if 0
-    uint8_t  write_status = SMTC_HAL_FAILURE;
-    uint16_t memAddSize   = 0u;
-
-    assert_param( ( id > 0 ) && ( ( id - 1 ) < sizeof( hal_i2c ) ) );
-    uint32_t local_id = id - 1;
-
-    if( i2c_internal_addr_size == I2C_ADDR_SIZE_8 )
-    {
-        memAddSize = I2C_MEMADD_SIZE_8BIT;
-    }
-    else
-    {
-        memAddSize = I2C_MEMADD_SIZE_16BIT;
-    }
-    if( HAL_I2C_Mem_Write( &hal_i2c[local_id].handle, device_addr, addr, memAddSize, buffer, size, 2000u ) == HAL_OK )
-    {
-        write_status = SMTC_HAL_SUCCESS;
-    }
-    return write_status;
-#else
-	return 0;
-#endif
+    // Not implemented
+    return 0;
 }
 
 static uint8_t i2c_read_buffer( const uint32_t id, uint8_t device_addr, uint16_t addr, uint8_t* buffer, uint16_t size )
 {
-#if 0
-    uint8_t  readStatus = SMTC_HAL_FAILURE;
-    uint16_t memAddSize = 0u;
-
-    assert_param( ( id > 0 ) && ( ( id - 1 ) < sizeof( hal_i2c ) ) );
-    uint32_t local_id = id - 1;
-
-    if( i2c_internal_addr_size == I2C_ADDR_SIZE_8 )
-    {
-        memAddSize = I2C_MEMADD_SIZE_8BIT;
-    }
-    else
-    {
-        memAddSize = I2C_MEMADD_SIZE_16BIT;
-    }
-    if( HAL_I2C_Mem_Read( &hal_i2c[local_id].handle, device_addr, addr, memAddSize, buffer, size, 2000 ) == HAL_OK )
-    {
-        readStatus = SMTC_HAL_SUCCESS;
-    }
-
-    return readStatus;
-#else
-	return 0;
-#endif
+    // Not implemented
+    return 0;
 }
