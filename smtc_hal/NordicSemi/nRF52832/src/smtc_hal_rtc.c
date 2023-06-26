@@ -61,7 +61,7 @@
 
 /* MCU Wake Up Time */
 #define MIN_ALARM_DELAY_IN_TICKS 3U // in ticks
-
+                        
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE TYPES -----------------------------------------------------------
@@ -112,6 +112,15 @@ APP_TIMER_DEF(wakeup_timer);
  */
 static uint64_t rtc_get_timestamp_in_ticks(void);
 
+/*!
+ * @brief Get the elapsed time in seconds and milliseconds since RTC initialization
+ *
+ * @param [out] milliseconds_div_10 Number of 0.1 milliseconds elapsed since RTC
+ *                                  initialization
+ * @returns seconds Number of seconds elapsed since RTC initialization
+ */
+static uint32_t hal_rtc_get_calendar_time( uint16_t* milliseconds_div_10 );
+
 /**@brief Function for handling the alarm timer timeout.
  *
  * @param[in] p_context  Pointer used for passing some arbitrary information (context) from the
@@ -148,39 +157,63 @@ void hal_rtc_init(void) {
 }
 
 uint32_t hal_rtc_get_time_s(void) {
+#if 0
     uint32_t seconds;
-    uint32_t ticks;
+    uint64_t ticks;
 
-    ticks = hal_rtc_get_timer_value();
+    ticks = rtc_get_timestamp_in_ticks();
 
     uint64_t tmp = ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
     seconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return seconds;
+ #else
+    uint16_t milliseconds_div_10 = 0;
+    return hal_rtc_get_calendar_time( &milliseconds_div_10 );
+#endif
 }
 
 uint32_t hal_rtc_get_time_100us(void) {
-    uint32_t ticks;
+#if 0
+    uint64_t ticks;
     uint32_t val_100us;
 
-    ticks = hal_rtc_get_timer_value();
+    ticks = rtc_get_timestamp_in_ticks();
 
     uint64_t tmp = 10000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
     val_100us = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return val_100us;
+#else
+    uint32_t seconds             = 0;
+    uint16_t milliseconds_div_10 = 0;
+
+    seconds = hal_rtc_get_calendar_time( &milliseconds_div_10 );
+
+    return seconds * 10000 + milliseconds_div_10;
+#endif
 }
 
 uint32_t hal_rtc_get_time_ms(void) {
+#if 0
     uint32_t milliseconds;
-    uint32_t ticks;
+    uint64_t ticks;
 
-    ticks = hal_rtc_get_timer_value();
+    ticks = rtc_get_timestamp_in_ticks();
 
     uint64_t tmp = 1000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
     milliseconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
 
     return milliseconds;
+#else
+
+    uint32_t seconds             = 0;
+    uint16_t milliseconds_div_10 = 0;
+
+    seconds = hal_rtc_get_calendar_time( &milliseconds_div_10 );
+
+    return seconds * 1000 + ( milliseconds_div_10 / 10 );
+#endif
 }
 
 void hal_rtc_stop_alarm(void) {
@@ -195,7 +228,7 @@ void hal_rtc_stop_alarm(void) {
  * @param [in] timeout Duration of the Timer ticks
  */
 void hal_rtc_start_alarm(uint32_t timeout) {
-    app_timer_stop(alarm_timer);
+   // app_timer_stop(alarm_timer);
     app_timer_start(alarm_timer, timeout, NULL);
 }
 
@@ -224,14 +257,14 @@ void hal_rtc_wakeup_timer_set_s(const int32_t seconds) {
     int32_t milliseconds = seconds * 1000;
     /* reset irq status */
     wut_timer_irq_happened = false;
-    app_timer_stop(wakeup_timer);
+    //app_timer_stop(wakeup_timer);
     app_timer_start(wakeup_timer, APP_TIMER_TICKS(milliseconds), NULL);
 }
 
 void hal_rtc_wakeup_timer_set_ms(const int32_t milliseconds) {
     /* reset irq status */
     wut_timer_irq_happened = false;
-    app_timer_stop(wakeup_timer);
+    //app_timer_stop(wakeup_timer);
     app_timer_start(wakeup_timer, APP_TIMER_TICKS(milliseconds), NULL);
 }
 
@@ -270,23 +303,50 @@ uint32_t hal_rtc_ms_2_tick(const uint32_t milliseconds) {
 }
 
 uint32_t hal_rtc_tick_2_100_us(const uint32_t tick) {
-    // return APP_TIMER_100US(tick);
-    uint64_t tmp = tick * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    tmp = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
-    tmp *= 10000;
-    return (uint32_t)tmp;
+    //TODO: Improve tick conversion in order to remove float lib
+    float numerator = ((float)APP_TIMER_CONFIG_RTC_FREQUENCY + 1.0f) * 10000.0f;
+    float denominator = (float)APP_TIMER_CLOCK_FREQ;
+    float val100_us_per_tick = numerator / denominator;
+
+    uint32_t ms = val100_us_per_tick * tick;
+
+    return ms;
 }
 
 uint32_t hal_rtc_tick_2_ms(const uint32_t tick) {
-    // return APP_TIMER_MS(tick);
-    uint64_t tmp = tick * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    tmp = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
-    tmp *= 1000;
-    return (uint32_t)tmp;
+    //TODO: Improve tick conversion in order to remove float lib
+    float numerator = ((float)APP_TIMER_CONFIG_RTC_FREQUENCY + 1.0f) * 1000.0f;
+    float denominator = (float)APP_TIMER_CLOCK_FREQ;
+    float ms_per_tick = numerator / denominator;
+
+    uint32_t ms = ms_per_tick * tick;
+
+    return ms;
 }
 
 static uint64_t rtc_get_timestamp_in_ticks(void) {
     return app_timer_timestamp_get();
+}
+
+static uint32_t hal_rtc_get_calendar_time(uint16_t* milliseconds_div_10)
+{
+    uint32_t ticks;
+    uint32_t seconds;
+
+    uint64_t timestamp_in_ticks = rtc_get_timestamp_in_ticks();
+
+    //TODO: Improve tick conversion in order to remove float lib
+    float numerator = ((float)APP_TIMER_CONFIG_RTC_FREQUENCY + 1.0f);
+    float denominator = (float)APP_TIMER_CLOCK_FREQ;
+    float sec_per_tick = numerator / denominator;
+
+    seconds = sec_per_tick * timestamp_in_ticks;
+
+    ticks = timestamp_in_ticks- APP_TIMER_TICKS(seconds*1000);
+    
+    *milliseconds_div_10 = hal_rtc_tick_2_100_us(ticks);
+
+    return seconds;
 }
 
 uint32_t hal_rtc_get_minimum_timeout(void) { return (MIN_ALARM_DELAY_IN_TICKS); }
