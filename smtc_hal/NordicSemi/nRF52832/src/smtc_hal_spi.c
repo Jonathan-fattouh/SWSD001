@@ -135,13 +135,6 @@ uint16_t hal_spi_in_out(const uint32_t id, const uint16_t out_data) {
         mcu_panic();
     }
 
-    if (NRF_SPIM2->EVENTS_ENDRX)
-        NRF_SPIM2->EVENTS_ENDRX = 0;
-    if (NRF_SPIM2->EVENTS_ENDTX)
-        NRF_SPIM2->EVENTS_ENDTX = 0;
-    if (NRF_SPIM2->EVENTS_END)
-        NRF_SPIM2->EVENTS_END = 0;
-
     return (uint16_t)in_data;
 }
 
