@@ -696,7 +696,7 @@
 #endif
 // <o> GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins 
 #ifndef GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
-#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 6
+#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 3
 #endif
 
 // <o> GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -1564,7 +1564,7 @@
 // <7=> 7 
 
 #ifndef RNG_CONFIG_IRQ_PRIORITY
-#define RNG_CONFIG_IRQ_PRIORITY 3
+#define RNG_CONFIG_IRQ_PRIORITY 2
 #endif
 
 // </e>
@@ -1811,7 +1811,7 @@
 // <7=> 7 
 
 #ifndef APP_TIMER_CONFIG_IRQ_PRIORITY
-#define APP_TIMER_CONFIG_IRQ_PRIORITY 2
+#define APP_TIMER_CONFIG_IRQ_PRIORITY 3
 #endif
 
 // <o> APP_TIMER_CONFIG_OP_QUEUE_SIZE - Capacity of timer requests queue. 
