@@ -60,3 +60,10 @@ dkms.conf
 *.emSession
 *.jlink
 *.asm
+tx_rx_continuous.ld
+stream.ld
+lorawan.ld
+time_sync.ld
+large_file_upload.ld
+almanac_update.ld
+dm_info.ld
