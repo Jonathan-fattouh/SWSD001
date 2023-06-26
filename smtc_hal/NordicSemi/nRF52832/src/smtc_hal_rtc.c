@@ -157,63 +157,26 @@ void hal_rtc_init(void) {
 }
 
 uint32_t hal_rtc_get_time_s(void) {
-#if 0
-    uint32_t seconds;
-    uint64_t ticks;
-
-    ticks = rtc_get_timestamp_in_ticks();
-
-    uint64_t tmp = ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    seconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
-
-    return seconds;
- #else
     uint16_t milliseconds_div_10 = 0;
     return hal_rtc_get_calendar_time( &milliseconds_div_10 );
-#endif
 }
 
 uint32_t hal_rtc_get_time_100us(void) {
-#if 0
-    uint64_t ticks;
-    uint32_t val_100us;
-
-    ticks = rtc_get_timestamp_in_ticks();
-
-    uint64_t tmp = 10000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    val_100us = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
-
-    return val_100us;
-#else
     uint32_t seconds             = 0;
     uint16_t milliseconds_div_10 = 0;
 
     seconds = hal_rtc_get_calendar_time( &milliseconds_div_10 );
 
     return seconds * 10000 + milliseconds_div_10;
-#endif
 }
 
 uint32_t hal_rtc_get_time_ms(void) {
-#if 0
-    uint32_t milliseconds;
-    uint64_t ticks;
-
-    ticks = rtc_get_timestamp_in_ticks();
-
-    uint64_t tmp = 1000 * ticks * (APP_TIMER_CONFIG_RTC_FREQUENCY + 1);
-    milliseconds = tmp / (uint64_t)APP_TIMER_CLOCK_FREQ;
-
-    return milliseconds;
-#else
-
     uint32_t seconds             = 0;
     uint16_t milliseconds_div_10 = 0;
 
     seconds = hal_rtc_get_calendar_time( &milliseconds_div_10 );
 
     return seconds * 1000 + ( milliseconds_div_10 / 10 );
-#endif
 }
 
 void hal_rtc_stop_alarm(void) {
