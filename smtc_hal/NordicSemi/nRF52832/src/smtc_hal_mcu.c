@@ -48,6 +48,7 @@
 #include "nrf.h"
 #include "nrf_delay.h"
 #include "nrf_drv_clock.h"
+#include "app_util_platform.h"
 #include "smtc_hal.h"
 #include "nrf_pwr_mgmt.h"
 
@@ -93,6 +94,7 @@ typedef enum low_power_mode_e {
 static volatile bool exit_wait = false;
 static volatile low_power_mode_t lp_current_mode = LOW_POWER_ENABLE;
 static bool partial_sleep_enable = false;
+static uint8_t __CR_NESTED = 0;  
 
 /*
  * -----------------------------------------------------------------------------
@@ -154,12 +156,11 @@ static void vprint(const char *fmt, va_list argp);
  */
 
 void hal_mcu_critical_section_begin(uint32_t *mask) {
-    *mask = __get_PRIMASK();
-    __disable_irq();
+    app_util_critical_region_enter(&__CR_NESTED);
 }
 
 void hal_mcu_critical_section_end(uint32_t *mask) {
-    __set_PRIMASK(*mask);
+    app_util_critical_region_exit(__CR_NESTED); 
 }
 
 void hal_mcu_disable_irq(void) {
@@ -175,9 +176,8 @@ void hal_mcu_delay_ms(uint32_t delay_ms) {
 }
 
 uint32_t hal_mcu_get_tick(void) {
-#if 0
-	return HAL_GetTick( );
-#endif
+    //Not implemented
+    return 0;
 }
 
 void hal_mcu_init(void) {
@@ -198,6 +198,9 @@ void hal_mcu_init(void) {
 
     /* Initialize the user flash */
     hal_flash_init( );
+
+    /* Init power voltage voltage detector */
+    hal_mcu_pvd_config( );
 
     /* Initialize SPI */
     hal_spi_init(HAL_RADIO_SPI_ID, SMTC_RADIO_SPI_MOSI, SMTC_RADIO_SPI_MISO, SMTC_RADIO_SPI_SCLK);
@@ -256,7 +259,8 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     } while ((hal_rtc_has_wut_irq_happened() == true) && (last_sleep_loop == false));
     if (last_sleep_loop == false) {
         // in case sleep mode is interrupted by an other irq than the wake up timer, stop it and exit
-        hal_rtc_wakeup_timer_stop(); //TODO cause infinite loop, why?
+        //TODO cause infinite loop, why?
+        //hal_rtc_wakeup_timer_stop(); 
     }
 
      // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
@@ -316,35 +320,24 @@ void hal_mcu_partial_sleep_enable(bool enable) { partial_sleep_enable = enable; 
  */
 
 static void hal_mcu_system_clock_config(void) {
-   /* if (nrf_drv_clock_init())
-    {
-        mcu_panic( );  // Initialization Error
-    }
-    nrf_drv_clock_lfclk_request(NULL);*/
+  //  if (nrf_drv_clock_init())
+  //  {
+  //      mcu_panic( );  // Initialization Error
+  //  }
+  //  nrf_drv_clock_lfclk_request(NULL);
+
+  //   while (!nrf_drv_clock_lfclk_is_running()) {}
+
+
     NRF_CLOCK->LFCLKSRC = 1;
-NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
-NRF_CLOCK->TASKS_LFCLKSTART = 1;
-while(NRF_CLOCK->EVENTS_LFCLKSTARTED == 0);
-NRF_CLOCK->EVENTS_LFCLKSTARTED=0;
-}
+    NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
+    NRF_CLOCK->TASKS_LFCLKSTART = 1;
+    while(NRF_CLOCK->EVENTS_LFCLKSTARTED == 0);
+    NRF_CLOCK->EVENTS_LFCLKSTARTED=0;
+    }
 
 static void hal_mcu_pvd_config(void) {
-#if 0
-    PWR_PVDTypeDef sConfigPVD;
-    sConfigPVD.PVDLevel = PWR_PVDLEVEL_1;
-    sConfigPVD.Mode     = PWR_PVD_MODE_IT_RISING;
-    if( HAL_PWR_ConfigPVD( &sConfigPVD ) != HAL_OK )
-    {
-        assert_param( FAIL );
-    }
-
-    /* Enable PVD */
-    HAL_PWR_EnablePVD( );
-
-    /* Enable and set PVD Interrupt priority */
-    HAL_NVIC_SetPriority( PVD_PVM_IRQn, 0, 0 );
-    HAL_NVIC_EnableIRQ( PVD_PVM_IRQn );
-#endif
+    //TODO: Implement Power Voltage Detector ?
 }
 
 static void hal_mcu_gpio_init(void) {
@@ -361,7 +354,8 @@ static void hal_mcu_gpio_init(void) {
  *
  */
 static void hal_mcu_lpm_mcu_deinit(void) {
-    hal_spi_deinit(HAL_RADIO_SPI_ID);
+    //TODO: Temporary comment SPI Enable/Disable because it is causing crashes
+    // hal_spi_deinit(HAL_RADIO_SPI_ID);
 
     /* Disable I2C */
     //  hal_i2c_deinit( HAL_I2C_ID );
@@ -384,7 +378,8 @@ static void hal_mcu_lpm_mcu_reinit(void) {
     // hal_i2c_init( HAL_I2C_ID, SMTC_I2C_SDA, SMTC_I2C_SCL );
 
     /* Initialize SPI */
-    hal_spi_init(HAL_RADIO_SPI_ID, SMTC_RADIO_SPI_MOSI, SMTC_RADIO_SPI_MISO, SMTC_RADIO_SPI_SCLK);
+    //TODO: Temporary comment SPI Enable/Disable because it is causing crashes
+    // hal_spi_init(HAL_RADIO_SPI_ID, SMTC_RADIO_SPI_MOSI, SMTC_RADIO_SPI_MISO, SMTC_RADIO_SPI_SCLK);
 }
 #endif
 
@@ -404,7 +399,7 @@ static void hal_mcu_lpm_enter_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if( lp_current_mode == LOW_POWER_ENABLE )
     {
-      //  hal_mcu_lpm_mcu_deinit( ); //TODO commment for test
+        hal_mcu_lpm_mcu_deinit( );
         nrf_pwr_mgmt_run();
     }
     else
@@ -422,7 +417,7 @@ static void hal_mcu_lpm_exit_sleep_mode(void) {
 #if (HAL_LOW_POWER_MODE == HAL_FEATURE_ON)
     if (lp_current_mode == LOW_POWER_ENABLE) {
         /* Reinitializes the MCU */
-      //  hal_mcu_lpm_mcu_reinit(); //TODO comment for test
+        hal_mcu_lpm_mcu_reinit();
     }
 #endif
 
