@@ -40,8 +40,9 @@
 #include <stdbool.h>  // bool type
 
 #include "smtc_hal_adc.h"
-//#include "stm32l4xx_hal.h"
 #include "smtc_hal_mcu.h"
+
+#include "nrf_temp.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -63,7 +64,6 @@
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-//static ADC_HandleTypeDef hal_adc_handle;
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE FUNCTIONS DECLARATION -------------------------------------------
@@ -77,102 +77,48 @@ static uint16_t adc_read( uint32_t channel, uint32_t sampling_time );
  */
 void hal_adc_init( void )
 {
-#if 0	
-    hal_adc_handle.Instance                   = ADC1;
-    hal_adc_handle.Init.ClockPrescaler        = ADC_CLOCK_ASYNC_DIV12;
-    hal_adc_handle.Init.DataAlign             = ADC_DATAALIGN_RIGHT;
-    hal_adc_handle.Init.Resolution            = ADC_RESOLUTION_12B;
-    hal_adc_handle.Init.ScanConvMode          = ADC_SCAN_DISABLE;
-    hal_adc_handle.Init.ExternalTrigConv      = ADC_SOFTWARE_START;
-    hal_adc_handle.Init.ExternalTrigConvEdge  = ADC_EXTERNALTRIGCONVEDGE_NONE;
-    hal_adc_handle.Init.EOCSelection          = ADC_EOC_SEQ_CONV;
-    hal_adc_handle.Init.NbrOfConversion       = 1;
-    hal_adc_handle.Init.NbrOfDiscConversion   = 0;
-    hal_adc_handle.Init.ContinuousConvMode    = DISABLE;
-    hal_adc_handle.Init.DiscontinuousConvMode = DISABLE;
-    hal_adc_handle.Init.LowPowerAutoWait      = DISABLE;
-    hal_adc_handle.Init.DMAContinuousRequests = DISABLE;
-    hal_adc_handle.Init.OversamplingMode      = DISABLE;
-    hal_adc_handle.Init.Overrun               = ADC_OVR_DATA_OVERWRITTEN;
-
-    if( HAL_ADC_Init( &hal_adc_handle ) != HAL_OK )
-    {
-        mcu_panic( );
-    }
-
-    /* Run the ADC calibration in single-ended mode */
-    if( HAL_ADCEx_Calibration_Start( &hal_adc_handle, ADC_SINGLE_ENDED ) != HAL_OK )
-    {
-        /* Calibration Error */
-        mcu_panic( );
-    }
-#endif
+    // Not implemented
 }
 
 uint16_t hal_adc_get_vref_int( void )
 {
-#if 0	
-    // 6.5 cycle == 1µs (6.5 x 12 / 80)
-    uint16_t adc_val = adc_read( ADC_CHANNEL_VREFINT, ADC_SAMPLETIME_6CYCLES_5 );
-
-    return ( uint16_t ) __HAL_ADC_CALC_VREFANALOG_VOLTAGE( adc_val, ADC_RESOLUTION_12B );
-#else
-	return 0;
-#endif
+    // Not implemented
+    return 0;
 }
 
 int8_t hal_adc_get_vbat( void )
 {
-#if 0
-    // Update vref for more precise measure
-    uint16_t vref_int_mv = hal_adc_get_vref_int( );
-
-    // 6.5 cycle == 1µs (6.5 x 12 / 80)
-    uint16_t adc_val = adc_read( ADC_CHANNEL_VBAT, ADC_SAMPLETIME_6CYCLES_5 );
-    uint16_t vbat    = __HAL_ADC_CALC_DATA_TO_VOLTAGE( vref_int_mv, adc_val, ADC_RESOLUTION_12B );
-    return vbat;
-#else
-	return 0;
-#endif
+    // Not implemented
+    return 0;
 }
 
 int8_t hal_adc_get_temp( void )
 {
-#if 0	
-    // Update vref for more precise measure
-    uint16_t vref_int_mv = hal_adc_get_vref_int( );
+    int32_t temp;
 
-    // Internal temperature sensor needs at least 5µs to be measured properly
-    // ADC is clock at 6.66 MHz (80Mhz / 12) so 5µs is 33.3 cycle --> we choose 47.5 cycles (7.125µs)
-    uint16_t adc_val     = adc_read( ADC_CHANNEL_TEMPSENSOR, ADC_SAMPLETIME_47CYCLES_5 );
-    int32_t  temperature = __HAL_ADC_CALC_TEMPERATURE( vref_int_mv, adc_val, ADC_RESOLUTION_12B );
+    /** Start the temperature measurement. */
+    NRF_TEMP->TASKS_START = 1;
 
-    return ( int8_t ) temperature;
-#else
-	return 0;
-#endif
+    /* Busy wait while temperature measurement is not finished */
+    while (NRF_TEMP->EVENTS_DATARDY == 0)
+    {
+        // Do nothing.
+    }
+    NRF_TEMP->EVENTS_DATARDY = 0;
+
+    /**@note Workaround for PAN_028 rev2.0A anomaly 29 - TEMP: Stop task clears the TEMP register. */
+    temp = (nrf_temp_read() / 4);
+
+    /**@note Workaround for PAN_028 rev2.0A anomaly 30 - TEMP: Temp module analog front end does not power down when DATARDY event occurs. */
+    NRF_TEMP->TASKS_STOP = 1; /** Stop the temperature measurement. */
+
+    return (int8_t)temp;
 }
 
 void hal_adc_deinit( void ) 
 { 
-#if 0
-	HAL_ADC_DeInit( &hal_adc_handle );
-#endif	
+    // Not implemented
 }
-
-#if 0
-void HAL_ADC_MspInit( ADC_HandleTypeDef* adc_handle ) 
-{ 
-	__HAL_RCC_ADC_CLK_ENABLE( ); 
-}
-#endif	
-#if 0
-void HAL_ADC_MspDeInit( ADC_HandleTypeDef* adc_handle )
-{
-    /* Peripheral clock disable */
-    __HAL_RCC_ADC_CLK_DISABLE( );
-}
-#endif	
 
 /*
  * -----------------------------------------------------------------------------
@@ -188,41 +134,6 @@ void HAL_ADC_MspDeInit( ADC_HandleTypeDef* adc_handle )
  */
 static uint16_t adc_read( uint32_t channel, uint32_t sampling_time )
 {
-#if 0	
-    ADC_ChannelConfTypeDef adc_channel_conf = { 0 };
-    uint16_t               adc_value        = 0;
-
-    adc_channel_conf.Channel      = channel;
-    adc_channel_conf.SamplingTime = sampling_time;
-    adc_channel_conf.Rank         = ADC_REGULAR_RANK_1;
-
-    if( HAL_ADC_ConfigChannel( &hal_adc_handle, &adc_channel_conf ) != HAL_OK )
-    {
-        return 0;
-    }
-
-    if( HAL_ADC_Start( &hal_adc_handle ) != HAL_OK )
-    {
-        return 0;
-    }
-
-    if( HAL_ADC_PollForConversion( &hal_adc_handle, 10 ) != HAL_OK )
-    {
-        return 0;
-    }
-
-    if( ( HAL_ADC_GetState( &hal_adc_handle ) & HAL_ADC_STATE_REG_EOC ) == HAL_ADC_STATE_REG_EOC )
-    {
-        adc_value = HAL_ADC_GetValue( &hal_adc_handle );
-    }
-
-    if( HAL_ADC_Stop( &hal_adc_handle ) != HAL_OK )
-    {
-        return 0;
-    }
-
-    return adc_value;
-#else
-	return 0;
-#endif
+    // Not implemented
+    return 0;
 }

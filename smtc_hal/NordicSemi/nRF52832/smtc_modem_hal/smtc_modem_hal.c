@@ -315,9 +315,10 @@ uint8_t smtc_modem_hal_get_battery_level( void )
 int8_t smtc_modem_hal_get_temperature( void )
 {
     int8_t temperature;
-    hal_adc_init( );
+   
+   // Temperature sensor is not using ADC so no need to call to hal_adc_init and hal_adc_deinit
     temperature = hal_adc_get_temp( );
-    hal_adc_deinit( );
+   
     return temperature;
 }
 
