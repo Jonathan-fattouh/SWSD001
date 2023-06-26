@@ -49,7 +49,7 @@ extern "C" {
  * --- PUBLIC MACROS -----------------------------------------------------------
  */
 
-#define ADDR_FLASH_PAGE_SIZE ( ( uint32_t ) 0x00000800 ) /* Size of Page = 2 KBytes */
+#define ADDR_FLASH_PAGE_SIZE ( ( uint32_t ) 0x00001000 ) /* Size of Page = 4 KBytes */
 
 #define FLASH_BYTE_EMPTY_CONTENT ( ( uint8_t ) 0xFF )
 #define FLASH_PAGE_EMPTY_CONTENT ( ( uint64_t ) 0xFFFFFFFFFFFFFFFF )
@@ -59,7 +59,7 @@ extern "C" {
 #define FLASH_END_ADDR_OF_PAGE( page ) \
     ( ADDR_FLASH_PAGE( page ) + ADDR_FLASH_PAGE_SIZE - 1 )                    /* Last memory address of a flash page */
 #define FLASH_USER_END_ADDR ( FLASH_END_ADDR_OF_PAGE( FLASH_USER_END_PAGE ) ) /* End @ of user Flash area */
-#define FLASH_USER_END_PAGE ( 506 )                                           /* End nb page of user Flash area */
+#define FLASH_USER_END_PAGE ( 128 )                                           /* End nb page of user Flash area */
 
 #define FLASH_USER_INTERNAL_LOG_CTX_START_PAGE ( FLASH_USER_END_PAGE )
 
@@ -67,7 +67,7 @@ extern "C" {
 #define FLASH_USER_INTERNAL_LOG_CTX_END_ADDR ( FLASH_END_ADDR_OF_PAGE( FLASH_USER_INTERNAL_LOG_CTX_START_PAGE ) )
 
 /* Base address of the Flash s */
-#define ADDR_FLASH_PAGE_0 ( ( uint32_t ) 0x08000000 ) /* Base @ of Page 0, 2 KBytes */
+#define ADDR_FLASH_PAGE_0 ( ( uint32_t ) 0x00000000 ) /* Base @ of Page 0, 4 KBytes */
 #define ADDR_FLASH_PAGE( page ) ( ADDR_FLASH_PAGE_0 + ( page ) *ADDR_FLASH_PAGE_SIZE )
 
 #endif  // SMTC_HAL_FLASH_MAPPING_H

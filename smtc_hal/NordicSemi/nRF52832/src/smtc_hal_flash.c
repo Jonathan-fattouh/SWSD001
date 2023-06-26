@@ -80,11 +80,6 @@
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-/*!
- * @brief Initializes the flash_user_start_addr to FLASH_USER_END_ADDR to avoid erase an occupied memory.
- */
-uint32_t flash_user_start_addr = FLASH_USER_END_ADDR;
-
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE FUNCTIONS DECLARATION -------------------------------------------
@@ -114,7 +109,7 @@ NRF_FSTORAGE_DEF(nrf_fstorage_t fstorage) =
          * last page of flash available to write data. */
         .start_addr = 0x7C000,
         .end_addr = 0x80000,
-}; // TODO flash addr set manualy to end of flash for debug purpose, we allocate 4 pages of 4kB
+}; // NOTE flash addr set manualy to end of flash for debug purpose, they are changed at runtime
 
 /*
  * -----------------------------------------------------------------------------
@@ -149,8 +144,9 @@ smtc_hal_status_t hal_flash_init(void) {
 
     print_flash_info(&fstorage);
 
-    uint32_t end_addr = nrf5_flash_end_addr_get();
-    uint32_t start_addr = end_addr - 4 * NRF_FICR->CODEPAGESIZE;
+    // locate start & end of user flash space
+    fstorage.start_addr = (CODE_END & ~(NRF_FICR->CODEPAGESIZE-1));
+    fstorage.end_addr = nrf5_flash_end_addr_get();
 
     return status;
 }
@@ -163,13 +159,9 @@ smtc_hal_status_t hal_flash_erase_page(uint32_t addr, uint8_t nb_page) {
     /* Get the 1st page to erase */
     first_user_page = hal_flash_get_page(addr);
 
-    /* Get the number of pages to erase from 1st page */
-    nb_of_pages_max = hal_flash_get_page(FLASH_USER_END_ADDR) - hal_flash_get_page(flash_user_start_addr) + 1;
-
-    if ((flash_user_start_addr > addr) || (nb_page > nb_of_pages_max)) {
-        //  status = SMTC_HAL_FAILURE;
-        // TODO check if needed
-        // return status;
+    if ((fstorage.start_addr > addr) || fstorage.end_addr < (addr + nb_page*NRF_FICR->CODEPAGESIZE)) { 
+        status = SMTC_HAL_FAILURE;
+        return status;
     }
 
     if (nrf_fstorage_erase(&fstorage, addr, nb_page, NULL)) {
@@ -190,68 +182,32 @@ smtc_hal_status_t hal_flash_erase_page(uint32_t addr, uint8_t nb_page) {
 }
 
 uint8_t hal_flash_force_erase_page(uint32_t addr, uint8_t nb_page) {
-#if 0
-    uint8_t  status                = SMTC_HAL_SUCCESS;
-    uint8_t  hal_status            = SMTC_HAL_SUCCESS;
-    uint32_t first_user_page       = 0;
-    uint32_t page_error            = 0;
-    uint8_t  flash_operation_retry = 0;
-
-    FLASH_EraseInitTypeDef EraseInitStruct;
-
-    /* Unlock the Flash to enable the flash control register access *************/
-    HAL_FLASH_Unlock( );
-
-    /* Clear OPTVERR bit set on virgin samples */
-    __HAL_FLASH_CLEAR_FLAG( FLASH_FLAG_OPTVERR );
-
-    /* Erase the user Flash area
-    (area defined by flash_user_start_addr and FLASH_USER_END_ADDR) ***********/
+    uint8_t status = SMTC_HAL_SUCCESS;
+    uint32_t first_user_page = 0;
+    uint32_t nb_of_pages_max = 0;
 
     /* Get the 1st page to erase */
-    first_user_page = hal_flash_get_page( addr );
+    first_user_page = hal_flash_get_page(addr);
 
-    /* Fill EraseInit structure*/
-    EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES;
-    EraseInitStruct.Page      = first_user_page;
-    EraseInitStruct.NbPages   = nb_page;
+    /* Get the number of pages to erase from 1st page */
+   // nb_of_pages_max = hal_flash_get_page(FLASH_USER_END_ADDR) - hal_flash_get_page(flash_user_start_addr) + 1;
 
-    /* Note: If an erase operation in Flash memory also concerns data in the data or instruction cache,
-     you have to make sure that these data are rewritten before they are accessed during code
-     execution. If this cannot be done safely, it is recommended to flush the caches by setting the
-     DCRST and ICRST bits in the FLASH_CR register. */
-    do
-    {
-        hal_status = HAL_FLASHEx_Erase( &EraseInitStruct, &page_error );
-        flash_operation_retry++;
-    } while( ( hal_status != HAL_OK ) && ( flash_operation_retry < FLASH_OPERATION_MAX_RETRY ) );
 
-    if( flash_operation_retry >= FLASH_OPERATION_MAX_RETRY )
-    {
+    if (nrf_fstorage_erase(&fstorage, addr, nb_page, NULL)) {
         /*
-          Error occurred while  erase.
-          User can add here some code to deal with this error.
-          PageError will contain the faulty  and then to know the code error on this ,
-          user can call function 'HAL_FLASH_GetError()'
-        */
+       Error occurred while  erase.
+       User can add here some code to deal with this error.
+     */
         /* Infinite loop */
-        while( 1 )
-        {
+        while (1) {
         }
     }
-    else
-    {
-        flash_operation_retry = 0;
+
+    /* While fstorage is busy, sleep and wait for an event. */
+    while (nrf_fstorage_is_busy(&fstorage)) {
     }
 
-    /* Lock the Flash to disable the flash control register access (recommended
-    to protect the FLASH memory against possible unwanted operation) *********/
-    HAL_FLASH_Lock( );
-
     return status;
-#else
-    return 0;
-#endif
 }
 
 smtc_hal_status_t hal_flash_write_buffer(uint32_t addr, const uint8_t *buffer, uint32_t size) {
@@ -270,12 +226,11 @@ smtc_hal_status_t hal_flash_write_buffer(uint32_t addr, const uint8_t *buffer, u
     addr_end = addr + real_size;
 
     /* Get the number of pages available */
-    // nb_of_pages_max = hal_flash_get_page(FLASH_USER_END_ADDR) - hal_flash_get_page(flash_user_start_addr) + 1;
+ //   nb_of_pages_max = hal_flash_get_page(FLASH_USER_END_ADDR) - hal_flash_get_page(flash_user_start_addr) + 1;
 
-    if ((flash_user_start_addr > addr) || ((real_size / ADDR_FLASH_PAGE_SIZE) > nb_of_pages_max)) {
+    if ((fstorage.start_addr > addr) || fstorage.end_addr < addr_end) { 
         status = SMTC_HAL_FAILURE;
-        // TODO check if needed
-        //  return status;
+        return status;
     }
 
     /* Program the user Flash area */
@@ -299,9 +254,9 @@ void hal_flash_read_buffer(uint32_t addr, uint8_t *buffer, uint32_t size) {
     nrf_fstorage_read(&fstorage, addr, buffer, size);
 }
 
-uint32_t hal_flash_get_user_start_addr(void) { return flash_user_start_addr; }
+uint32_t hal_flash_get_user_start_addr(void) { return  fstorage.start_addr; }
 
-void hal_flash_set_user_start_addr(uint32_t addr) { flash_user_start_addr = addr; }
+void hal_flash_set_user_start_addr(uint32_t addr) {  fstorage.start_addr = addr; }
 
 /*
  * -----------------------------------------------------------------------------

@@ -63,16 +63,12 @@
  * -----------------------------------------------------------------------------
  * --- PRIVATE CONSTANTS -------------------------------------------------------
  */
-//TODO flash addr set manuallt to end of flash for debug purpose 
-#define ADDR_FLASH_LORAWAN_CONTEXT 0x7F000
-#define ADDR_FLASH_MODEM_CONTEXT 0x7E000
-#define ADDR_FLASH_DEVNONCE_CONTEXT 0x7D000
-#define ADDR_FLASH_SECURE_ELEMENT_CONTEXT 0x7C000
 
-//#define ADDR_FLASH_LORAWAN_CONTEXT ADDR_FLASH_PAGE(511)
-//#define ADDR_FLASH_MODEM_CONTEXT ADDR_FLASH_PAGE(510)
-//#define ADDR_FLASH_DEVNONCE_CONTEXT ADDR_FLASH_PAGE(509)
-//#define ADDR_FLASH_SECURE_ELEMENT_CONTEXT ADDR_FLASH_PAGE(508)
+//NOTE: first free page is 60, lets's write on 70+ so we have some margin in case the code size increases
+#define ADDR_FLASH_LORAWAN_CONTEXT ADDR_FLASH_PAGE(70)
+#define ADDR_FLASH_MODEM_CONTEXT ADDR_FLASH_PAGE(71)
+#define ADDR_FLASH_DEVNONCE_CONTEXT ADDR_FLASH_PAGE(72)
+#define ADDR_FLASH_SECURE_ELEMENT_CONTEXT ADDR_FLASH_PAGE(73)
 
 /*
  * -----------------------------------------------------------------------------
