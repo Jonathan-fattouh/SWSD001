@@ -164,11 +164,11 @@ void hal_mcu_critical_section_end(uint32_t *mask) {
 }
 
 void hal_mcu_disable_irq(void) {
-    __disable_irq();
+    // Removed implmentating as disabling IRQ is messing up with SD initilialization
 }
 
 void hal_mcu_enable_irq(void) {
-    __enable_irq();
+    // Removed implmentating as disabling IRQ is messing up with SD initilialization
 }
 
 void hal_mcu_delay_ms(uint32_t delay_ms) {
@@ -234,7 +234,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     }
 
     // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
-   // CRITICAL_SECTION_BEGIN();
+    //CRITICAL_SECTION_BEGIN();
 
     int32_t time_counter = milliseconds;
 
@@ -264,7 +264,7 @@ void hal_mcu_set_sleep_for_ms(const int32_t milliseconds) {
     }
 
      // Critical section commented - We want to keep RTC interrupt otherwise we will never wake up
-  //  CRITICAL_SECTION_END();
+    //CRITICAL_SECTION_END();
 }
 
 uint16_t hal_mcu_get_vref_level(void) { return hal_adc_get_vref_int(); }
