@@ -94,8 +94,6 @@ static uint32_t hal_flash_get_page(uint32_t address);
 
 static void fstorage_evt_handler(nrf_fstorage_evt_t *p_evt);
 
-static void print_flash_info(nrf_fstorage_t *p_fstorage);
-
 static uint32_t nrf5_flash_end_addr_get();
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t fstorage) =
@@ -141,8 +139,6 @@ smtc_hal_status_t hal_flash_init(void) {
     if (nrf_fstorage_init(&fstorage, p_fs_api, NULL)) {
         mcu_panic();
     }
-
-    print_flash_info(&fstorage);
 
     // locate start & end of user flash space
     fstorage.start_addr = (CODE_END & ~(NRF_FICR->CODEPAGESIZE-1));
@@ -294,13 +290,6 @@ static void fstorage_evt_handler(nrf_fstorage_evt_t *p_evt) {
     default:
         break;
     }
-}
-
-static void print_flash_info(nrf_fstorage_t *p_fstorage) {
-    NRF_LOG_INFO("========| flash info |========");
-    NRF_LOG_INFO("erase unit: \t%d bytes", p_fstorage->p_flash_info->erase_unit);
-    NRF_LOG_INFO("program unit: \t%d bytes", p_fstorage->p_flash_info->program_unit);
-    NRF_LOG_INFO("==============================");
 }
 
 static uint32_t hal_flash_get_page(uint32_t address) {
