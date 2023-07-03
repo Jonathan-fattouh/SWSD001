@@ -95,6 +95,9 @@ int8_t hal_adc_get_vbat( void )
 int8_t hal_adc_get_temp( void )
 {
     int32_t temp;
+#ifdef SOFTDEVICE_PRESENT
+    sd_temp_get(&temp);
+#else
 
     /** Start the temperature measurement. */
     NRF_TEMP->TASKS_START = 1;
@@ -111,7 +114,7 @@ int8_t hal_adc_get_temp( void )
 
     /**@note Workaround for PAN_028 rev2.0A anomaly 30 - TEMP: Temp module analog front end does not power down when DATARDY event occurs. */
     NRF_TEMP->TASKS_STOP = 1; /** Stop the temperature measurement. */
-
+#endif
     return (int8_t)temp;
 }
 
