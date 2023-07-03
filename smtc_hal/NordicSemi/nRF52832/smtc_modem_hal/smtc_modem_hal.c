@@ -64,11 +64,11 @@
  * --- PRIVATE CONSTANTS -------------------------------------------------------
  */
 
-//NOTE: first free page is 60, lets's write on 70+ so we have some margin in case the code size increases
-#define ADDR_FLASH_LORAWAN_CONTEXT ADDR_FLASH_PAGE(70)
-#define ADDR_FLASH_MODEM_CONTEXT ADDR_FLASH_PAGE(71)
-#define ADDR_FLASH_DEVNONCE_CONTEXT ADDR_FLASH_PAGE(72)
-#define ADDR_FLASH_SECURE_ELEMENT_CONTEXT ADDR_FLASH_PAGE(73)
+//NOTE: If using S132, thefirst free page is 99,  lets's write on 105+ so we have some margin in case the code size increases
+#define ADDR_FLASH_LORAWAN_CONTEXT ADDR_FLASH_PAGE(105)
+#define ADDR_FLASH_MODEM_CONTEXT ADDR_FLASH_PAGE(106)
+#define ADDR_FLASH_DEVNONCE_CONTEXT ADDR_FLASH_PAGE(107)
+#define ADDR_FLASH_SECURE_ELEMENT_CONTEXT ADDR_FLASH_PAGE(108)
 
 /*
  * -----------------------------------------------------------------------------
