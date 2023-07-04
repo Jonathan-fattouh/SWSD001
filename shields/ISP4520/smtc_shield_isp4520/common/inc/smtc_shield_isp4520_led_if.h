@@ -31,8 +31,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef SMTC_SHIELD_SX126X_LED_IF_H
-#define SMTC_SHIELD_SX126X_LED_IF_H
+#ifndef SMTC_SHIELD_ISP4520_LED_IF_H
+#define SMTC_SHIELD_ISP4520_LED_IF_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -110,4 +110,4 @@ void smtc_shield_sx126x_reset_led_rx( void );
 }
 #endif
 
-#endif  // SMTC_SHIELD_SX126X_LED_IF_H
+#endif  // SMTC_SHIELD_ISP4520_LED_IF_H
