@@ -188,7 +188,7 @@ int main( void )
     hal_mcu_enable_irq( );
     
     HAL_DBG_TRACE_MSG( "\n" );
-    HAL_DBG_TRACE_INFO( "###### ===== LoRa Basics Modem LoRaWAN Class A/C demo application ==== ######\n\n" );
+    HAL_DBG_TRACE_INFO( "###### ===== LoRa Basics Modem LoRaWAN Class A/C and BLE demo application ==== ######\n\n" );
     apps_modem_common_display_version_information( );
 
     while( 1 )
