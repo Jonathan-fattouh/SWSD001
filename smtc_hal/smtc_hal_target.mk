@@ -31,6 +31,10 @@ ifeq ($(MCU_BOARD), NUCLEO_L476RG)
 TARGET_MCU ?= STM32L476xx
 else ifeq ($(MCU_BOARD), ISP4520_EU)
 TARGET_MCU ?= nRF52832
+else ifeq ($(MCU_BOARD), ISP4520_AS)
+TARGET_MCU ?= nRF52832
+else ifeq ($(MCU_BOARD), ISP4520_US)
+TARGET_MCU ?= nRF52832
 else
 $(error Invalid target board, please select a supported target board)
 endif

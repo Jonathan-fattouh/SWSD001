@@ -26,8 +26,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-define SMTC_SHIELD_SX126X_SUPPORTED_BODY
-Shield $(SMTC_SHIELD_SX126X) is not supported.
+define SMTC_SHIELD_ISP4520_SUPPORTED_BODY
+Shield $(SMTC_SHIELD_ISP4520) is not supported.
 
 The supported shields are:
   * SX1261: ISP4520_EU / ISP4520_AS
@@ -35,24 +35,24 @@ The supported shields are:
 endef
 
 C_INCLUDES += \
--I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/inc \
+-I$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/common/inc \
 
 C_SOURCES += \
-$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/src/smtc_shield_sx126x_ant_sw.c \
-$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/common/src/smtc_shield_sx126x_led.c \
+$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/common/src/smtc_shield_isp4520_ant_sw.c \
+$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/common/src/smtc_shield_isp4520_led.c \
 
-ifeq ($(SMTC_SHIELD_SX126X), ISP4520_EU)
-C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/src/smtc_shield_sx1261mb1cas.c
-C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/inc
+ifeq ($(SMTC_SHIELD_ISP4520), ISP4520_EU)
+C_SOURCES += $(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_EU/src/smtc_shield_isp4520_eu.c
+C_INCLUDES += -I$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_EU/inc
 
-else ifeq ($(SMTC_SHIELD_SX126X), ISP4520_AS)
-C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/src/smtc_shield_sx1261mb1cas.c
-C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1261MB1CAS/inc
+else ifeq ($(SMTC_SHIELD_ISP4520), ISP4520_AS)
+C_SOURCES += $(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_AS/src/smtc_shield_isp4520_as.c
+C_INCLUDES += -I$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_AS/inc
 
-else ifeq ($(SMTC_SHIELD_SX126X), ISP4520_US)
-C_SOURCES += $(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1262MB2CAS/src/smtc_shield_sx1262mb2cas.c
-C_INCLUDES += -I$(SMTC_SHIELD_SX126X_DIR)/smtc_shield_sx126x/SX1262MB2CAS/inc
+else ifeq ($(SMTC_SHIELD_ISP4520), ISP4520_US)
+C_SOURCES += $(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_US/src/smtc_shield_isp4520_us.c
+C_INCLUDES += -I$(SMTC_SHIELD_ISP4520_DIR)/smtc_shield_isp4520/ISP4520_US/inc
 
 else
-$(error $(SMTC_SHIELD_SX126X_SUPPORTED_BODY))
+$(error $(SMTC_SHIELD_ISP4520_SUPPORTED_BODY))
 endif

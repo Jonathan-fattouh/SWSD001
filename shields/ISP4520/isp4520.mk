@@ -36,15 +36,15 @@ else
 $(error Invalid platform board, please select a supported platform board)
 endif
 
-SMTC_SHIELD_SX126X_DIR = $(TOP_DIR)/shields/ISP4520
-SMTC_SHIELD_SX126X = $(RADIO_BOARD)
+SMTC_SHIELD_ISP4520_DIR = $(TOP_DIR)/shields/ISP4520
+SMTC_SHIELD_ISP4520 = $(RADIO_BOARD)
 
-include $(TOP_DIR)/shields/ISP4520/smtc_shield_sx126x/smtc_shield_sx126x.mk
+include $(TOP_DIR)/shields/ISP4520/smtc_shield_isp4520/smtc_shield_isp4520.mk
 
 C_SOURCES +=  \
 $(TOP_DIR)/shields/ISP4520/radio_drivers_hal/sx126x_hal.c \
-$(TOP_DIR)/shields/ISP4520/common/src/ral_sx126x_bsp.c \
-$(TOP_DIR)/shields/ISP4520/common/src/smtc_board_sx126x.c \
+$(TOP_DIR)/shields/ISP4520/common/src/ral_isp4520_bsp.c \
+$(TOP_DIR)/shields/ISP4520/common/src/smtc_board_isp4520.c \
 
 C_INCLUDES +=  \
 -I$(TOP_DIR)/shields/ISP4520/radio_drivers_hal \

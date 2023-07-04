@@ -49,10 +49,17 @@ $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/u
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/util/app_error_weak.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/util/app_util_platform.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/util/nrf_assert.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/atomic_fifo/nrf_atfifo.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/atomic/nrf_atomic.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/balloc/nrf_balloc.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/fstorage/nrf_fstorage.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/fstorage/nrf_fstorage_nvmc.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/memobj/nrf_memobj.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/queue/nrf_queue.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/ringbuf/nrf_ringbuf.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/experimental_section_vars/nrf_section_iter.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/sortlist/nrf_sortlist.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/strerror/nrf_strerror.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/soc/nrfx_atomic.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/src/nrfx_adc.c\
@@ -86,9 +93,16 @@ $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/s
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/src/nrfx_uarte.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/src/nrfx_wdt.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/src/prs/nrfx_prs.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/hal/nrf_nvmc.c\
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_clock.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_power.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_rng.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_spi.c \
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_twi.c \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx/legacy/nrf_drv_uart.c \
-$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/mdk/system_nrf52.c
+$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/mdk/system_nrf52.c \
+$(TOP_DIR)/host_driver/NordicSemi/custom_lib/timer/app_timer2.c  \
+$(TOP_DIR)/host_driver/NordicSemi/custom_lib/timer/drv_rtc.c
 
 ASM_SOURCES +=  \
 $(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/mdk/gcc_startup_nrf52.s
@@ -135,12 +149,15 @@ C_INCLUDES +=  \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/log \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/log/src \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/memobj \
+-I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/queue \
+-I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/pwr_mgmt \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/ringbuf \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/scheduler \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/sortlist \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/strerror \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/timer \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/util \
+-I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/components/libraries/mutex \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/external/fprintf \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/external/segger_rtt \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/integration/nrfx \
@@ -149,6 +166,7 @@ C_INCLUDES +=  \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/drivers/include  \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/hal  \
 -I$(TOP_DIR)/host_driver/NordicSemi/nRF5_SDK_17.0.2_d674dde/modules/nrfx/mdk  \
+-I$(TOP_DIR)/host_driver/NordicSemi/custom_lib/timer  \
 -I$(TOP_DIR)/host_driver/NordicSemi/config
 
 # Determine the linker script to use based on TARGET_MCU
