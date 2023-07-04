@@ -67,8 +67,9 @@ time_sync.ld
 large_file_upload.ld
 almanac_update.ld
 dm_info.ld
-apps/examples/lorawan_ble/SES/Output/Debug/Exe/lorawan_ble_EU.ld
-apps/examples/lorawan_ble/SES/Output/Debug/Exe/lorawan_ble_AS.ld
-apps/examples/lorawan_ble/SES/Output/Release/Exe/lorawan_ble_AS.ld
-apps/examples/lorawan_ble/SES/Output/Release/Exe/lorawan_ble.ld
-apps/examples/lorawan_ble/SES/Output/Debug/Exe/lorawan_ble.ld
+lorawan_ble_EU.ld
+lorawan_ble_AS.ld
+lorawan_ble_US.ld
+lorawan_EU.ld
+lorawan_AS.ld
+lorawan_US.ld
