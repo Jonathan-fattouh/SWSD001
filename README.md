@@ -2,6 +2,19 @@
 
 The LoRa Basics modem SDK contains several simple examples highlighting LoRa Basic Modem features.
 
+## Modification for ISP4520 compatibility
+
+This fork adds compatibility of the ISP4520 module to the LoRa Basics modem SDK.
+The ISP4520 is a BLE + LoRa module. It contains an nRF52832 as an MCU and an SX1261/SX1262 as LoRa transceiver. The module has 3 version: ISP45-EU for Europe, ISP4520-US for US and ISP4520-AS for Asia.
+For additionnal information go to https://www.insightsip.com/products/combo-smart-modules/isp4520.
+
+For each exisiting example an Segger Embedded Project is created. It can be download at https://www.segger.com/products/development-tools/embedded-studio.
+Demonstation (Region switching) is not implemented for ISP4520.
+Makefile system is not working for ISP4520 yet.
+
+A additonal example is avaialble only for ISP4520: LoRaWAN_BLE. 
+It inclucles code from the LoRaWAN example plus softdevice (BLE stack) configuration and basic BLE operation with the Device Information Service.
+
 ## Examples and demonstrations
 
 The SDK is made of two different kind of projects:
