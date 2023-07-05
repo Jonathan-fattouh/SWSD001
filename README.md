@@ -11,6 +11,7 @@ For additionnal information go to https://www.insightsip.com/products/combo-smar
 For each exisiting example an Segger Embedded Project is created. It can be download at https://www.segger.com/products/development-tools/embedded-studio.
 Demonstation (Region switching) is not implemented for ISP4520.
 Makefile system is not working for ISP4520 yet.
+Keil MDK ARM is not supported for ISP4520.
 
 A additonal example is avaialble only for ISP4520: LoRaWAN_BLE. 
 It inclucles code from the LoRaWAN example plus softdevice (BLE stack) configuration and basic BLE operation with the Device Information Service.
