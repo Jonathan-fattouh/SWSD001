@@ -52,7 +52,7 @@
 #define ISP4520_AS_MAX_PWR 14
 
 // PA config table
-const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_AS_MAX_PWR - ISP4520_AS_MIN_PWR + 1] = {
+const smtc_shield_isp4520_pa_pwr_cfg_t pa_cfg_table[ISP4520_AS_MAX_PWR - ISP4520_AS_MIN_PWR + 1] = {
     { // Expected output power = -17dBm
         .power = -17,
         .pa_config = {
@@ -377,7 +377,7 @@ const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_AS_MAX_PWR - ISP4520_
  * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
  */
 
-const smtc_shield_sx126x_pa_pwr_cfg_t* smtc_shield_sx126x_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
+const smtc_shield_isp4520_pa_pwr_cfg_t* smtc_shield_isp4520_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
                                                                           int8_t         expected_output_pwr_in_dbm )
 {
     if( ( ISP4520_AS_SUBGHZ_FREQ_MIN <= rf_freq_in_hz ) && ( rf_freq_in_hz <= ISP4520_AS_SUBGHZ_FREQ_MAX ) )
@@ -392,17 +392,17 @@ const smtc_shield_sx126x_pa_pwr_cfg_t* smtc_shield_sx126x_get_pa_pwr_cfg( const 
     return NULL;
 }
 
-bool smtc_shield_sx126x_is_dio2_set_as_rf_switch( void )
+bool smtc_shield_isp4520_is_dio2_set_as_rf_switch( void )
 {
     return true;
 }
 
-sx126x_reg_mod_t smtc_shield_sx126x_get_reg_mode( void )
+sx126x_reg_mod_t smtc_shield_isp4520_get_reg_mode( void )
 {
     return SX126X_REG_MODE_DCDC;
 }
 
-void smtc_shield_sx126x_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcxo_ctrl_voltages_t* supply_voltage,
+void smtc_shield_isp4520_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcxo_ctrl_voltages_t* supply_voltage,
                                       uint32_t* startup_time_in_tick )
 {
     *tcxo_is_radio_controlled = true;
@@ -410,44 +410,44 @@ void smtc_shield_sx126x_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcx
     *startup_time_in_tick     = 128;//300;
 }
 
-void smtc_shield_sx126x_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma )
+void smtc_shield_isp4520_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma )
 {
     *ocp_in_step_of_2_5_ma = 0x38;
 }
 
-void smtc_shield_sx126x_init( void )
+void smtc_shield_isp4520_init( void )
 {
-    smtc_shield_sx126x_init_led_tx( );
-    smtc_shield_sx126x_init_led_rx( );
+    smtc_shield_isp4520_init_led_tx( );
+    smtc_shield_isp4520_init_led_rx( );
 
-    smtc_shield_sx126x_reset_led_rx( );
-    smtc_shield_sx126x_reset_led_tx( );
+    smtc_shield_isp4520_reset_led_rx( );
+    smtc_shield_isp4520_reset_led_tx( );
 }
 
-void smtc_shield_sx126x_deinit( void )
+void smtc_shield_isp4520_deinit( void )
 {
-    smtc_shield_sx126x_deinit_led_tx( );
-    smtc_shield_sx126x_deinit_led_rx( );
+    smtc_shield_isp4520_deinit_led_tx( );
+    smtc_shield_isp4520_deinit_led_rx( );
 }
 
-void smtc_shield_sx126x_handle_pre_rx( void )
+void smtc_shield_isp4520_handle_pre_rx( void )
 {
-    smtc_shield_sx126x_set_led_rx( );
+    smtc_shield_isp4520_set_led_rx( );
 }
 
-void smtc_shield_sx126x_handle_post_rx( void )
+void smtc_shield_isp4520_handle_post_rx( void )
 {
-    smtc_shield_sx126x_reset_led_rx( );
+    smtc_shield_isp4520_reset_led_rx( );
 }
 
-void smtc_shield_sx126x_handle_pre_tx( void )
+void smtc_shield_isp4520_handle_pre_tx( void )
 {
-    smtc_shield_sx126x_set_led_tx( );
+    smtc_shield_isp4520_set_led_tx( );
 }
 
-void smtc_shield_sx126x_handle_post_tx( void )
+void smtc_shield_isp4520_handle_post_tx( void )
 {
-    smtc_shield_sx126x_reset_led_tx( );
+    smtc_shield_isp4520_reset_led_tx( );
 }
 
 /*

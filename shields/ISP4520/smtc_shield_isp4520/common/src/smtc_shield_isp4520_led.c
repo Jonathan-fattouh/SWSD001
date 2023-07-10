@@ -1,5 +1,5 @@
 /*!
- * @file      smtc_shield_sx126x_led.c
+ * @file      smtc_shield_isp4520_led.c
  *
  * @brief     Implementation for functions driving LEDs
  *
@@ -51,42 +51,42 @@
  * --- PRIVATE TYPES -----------------------------------------------------------
  */
 
-void smtc_shield_sx126x_init_led_tx( void )
+void smtc_shield_isp4520_init_led_tx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_init_led_rx( void )
+void smtc_shield_isp4520_init_led_rx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_deinit_led_tx( void )
+void smtc_shield_isp4520_deinit_led_tx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_deinit_led_rx( void )
+void smtc_shield_isp4520_deinit_led_rx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_set_led_tx( void )
+void smtc_shield_isp4520_set_led_tx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_reset_led_tx( void )
+void smtc_shield_isp4520_reset_led_tx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_set_led_rx( void )
+void smtc_shield_isp4520_set_led_rx( void )
 {
     // No LED implemented
 }
 
-void smtc_shield_sx126x_reset_led_rx( void )
+void smtc_shield_isp4520_reset_led_rx( void )
 {
     // No LED implemented
 }

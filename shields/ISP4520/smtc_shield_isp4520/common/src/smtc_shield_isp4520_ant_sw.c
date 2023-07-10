@@ -51,17 +51,17 @@
  * --- PRIVATE TYPES -----------------------------------------------------------
  */
 
-void smtc_shield_sx126x_init_ant_sw( )
+void smtc_shield_isp4520_init_ant_sw( )
 {
     // No antenna switch control needed here
 }
 
-void smtc_shield_sx126x_set_ant_sw( void )
+void smtc_shield_isp4520_set_ant_sw( void )
 {
     // No antenna switch control needed here
 }
 
-void smtc_shield_sx126x_reset_ant_sw( void )
+void smtc_shield_isp4520_reset_ant_sw( void )
 {
     // No antenna switch control needed here
 }

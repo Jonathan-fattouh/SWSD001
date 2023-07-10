@@ -1,5 +1,5 @@
 /*!
- * \file      smtc_shield_sx126x_common_if.h
+ * \file      smtc_shield_isp4520_common_if.h
  *
  * \brief     Interface for functions common to all SX126x-based shields
  *
@@ -64,11 +64,11 @@ extern "C" {
 /**
  * @brief Power amplifier and output power configurations structure definition
  */
-typedef struct smtc_shield_sx126x_pa_pwr_cfg_s
+typedef struct smtc_shield_isp4520_pa_pwr_cfg_s
 {
     int8_t                 power;
     sx126x_pa_cfg_params_t pa_config;
-} smtc_shield_sx126x_pa_pwr_cfg_t;
+} smtc_shield_isp4520_pa_pwr_cfg_t;
 
 /*
  * -----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ typedef struct smtc_shield_sx126x_pa_pwr_cfg_s
  *
  * @returns A pointer to a structure holding the configuration to be applied to the chip
  */
-const smtc_shield_sx126x_pa_pwr_cfg_t* smtc_shield_sx126x_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
+const smtc_shield_isp4520_pa_pwr_cfg_t* smtc_shield_isp4520_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
                                                                           const int8_t   expected_output_pwr_in_dbm );
 
 /**
@@ -91,14 +91,14 @@ const smtc_shield_sx126x_pa_pwr_cfg_t* smtc_shield_sx126x_get_pa_pwr_cfg( const 
  *
  * @returns A boolean giving the information if DIO2 drives a RF switch or not
  */
-bool smtc_shield_sx126x_is_dio2_set_as_rf_switch( void );
+bool smtc_shield_isp4520_is_dio2_set_as_rf_switch( void );
 
 /**
  * @brief Get the regulator mode used
  *
  * @returns The regulator mode
  */
-sx126x_reg_mod_t smtc_shield_sx126x_get_reg_mode( void );
+sx126x_reg_mod_t smtc_shield_isp4520_get_reg_mode( void );
 
 /**
  * @brief Get the XOSC configuration
@@ -109,7 +109,7 @@ sx126x_reg_mod_t smtc_shield_sx126x_get_reg_mode( void );
  * @param [out] supply_voltage TCXO supply voltage parameter
  * @param [out] startup_time_in_tick TCXO setup time in clock tick
  */
-void smtc_shield_sx126x_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcxo_ctrl_voltages_t* supply_voltage,
+void smtc_shield_isp4520_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcxo_ctrl_voltages_t* supply_voltage,
                                       uint32_t* startup_time_in_tick );
 
 /**
@@ -117,37 +117,37 @@ void smtc_shield_sx126x_get_xosc_cfg( bool* tcxo_is_radio_controlled, sx126x_tcx
  *
  * @param [out] ocp_in_step_of_2_5_ma OCP value given in steps of 2.5 mA
  */
-void smtc_shield_sx126x_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma );
+void smtc_shield_isp4520_get_ocp_value( uint8_t* ocp_in_step_of_2_5_ma );
 
 /**
  * @brief Initialize components available on the shield
  */
-void smtc_shield_sx126x_init( void );
+void smtc_shield_isp4520_init( void );
 
 /**
  * @brief De-initialize components available on the shield
  */
-void smtc_shield_sx126x_deinit( void );
+void smtc_shield_isp4520_deinit( void );
 
 /**
  * @brief Configure the shield before entering in RX mode
  */
-void smtc_shield_sx126x_handle_pre_rx( void );
+void smtc_shield_isp4520_handle_pre_rx( void );
 
 /**
  * @brief Configure the shield after leaving RX mode
  */
-void smtc_shield_sx126x_handle_post_rx( void );
+void smtc_shield_isp4520_handle_post_rx( void );
 
 /**
  * @brief Configure the shield before entering in TX mode
  */
-void smtc_shield_sx126x_handle_pre_tx( void );
+void smtc_shield_isp4520_handle_pre_tx( void );
 
 /**
  * @brief Configure the shield after leaving TX mode
  */
-void smtc_shield_sx126x_handle_post_tx( void );
+void smtc_shield_isp4520_handle_post_tx( void );
 
 #ifdef __cplusplus
 }

@@ -67,13 +67,15 @@ extern "C" {
 
 
 /* Sensors */
-// #define SMTC_I2C_SCL ARDUINO_CONNECTOR_D15
-// #define SMTC_I2C_SDA ARDUINO_CONNECTOR_D14
+// No sensors implemented
+// #define SMTC_I2C_SCL 
+// #define SMTC_I2C_SDA 
 
 /* LED */
-// #define SMTC_LED_RX ARDUINO_CONNECTOR_A5
-// #define SMTC_LED_TX ARDUINO_CONNECTOR_A4
-// #define SMTC_LED_SCAN ARDUINO_CONNECTOR_D4
+// No LEDs implemented
+// #define SMTC_LED_RX 
+// #define SMTC_LED_TX 
+// #define SMTC_LED_SCAN 
 
 /*
  * -----------------------------------------------------------------------------

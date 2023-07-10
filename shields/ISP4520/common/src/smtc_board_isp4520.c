@@ -89,17 +89,17 @@ static sx126x_hal_context_t radio_context = {
 
 void smtc_board_init_periph( void )
 {
-    smtc_shield_sx126x_init( );
+    smtc_shield_isp4520_init( );
 }
 
 void smtc_board_reinit_periph( void )
 {
-    smtc_shield_sx126x_init( );
+    smtc_shield_isp4520_init( );
 }
 
 void smtc_board_deinit_periph( void )
 {
-    smtc_shield_sx126x_deinit( );
+    smtc_shield_isp4520_deinit( );
 }
 
 ralf_t* smtc_board_initialise_and_get_ralf( void )
@@ -120,7 +120,7 @@ uint32_t smtc_board_get_tcxo_startup_time_in_ms( void )
     sx126x_tcxo_ctrl_voltages_t supply_voltage;
     uint32_t                    startup_time_in_tick;
 
-    smtc_shield_sx126x_get_xosc_cfg( &tcxo_is_radio_controlled, &supply_voltage, &startup_time_in_tick );
+    smtc_shield_isp4520_get_xosc_cfg( &tcxo_is_radio_controlled, &supply_voltage, &startup_time_in_tick );
 
     if( tcxo_is_radio_controlled == true )
     {

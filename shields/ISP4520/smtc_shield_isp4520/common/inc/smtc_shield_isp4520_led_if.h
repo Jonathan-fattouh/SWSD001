@@ -1,5 +1,5 @@
 /*!
- * \file      smtc_shield_sx126x_led_if.h
+ * \file      smtc_shield_isp4520_led_if.h
  *
  * \brief     Interface for functions driving LEDs
  *
@@ -69,42 +69,42 @@ extern "C" {
 /**
  * @brief Initialize the GPIO driving the TX LED
  */
-void smtc_shield_sx126x_init_led_tx( void );
+void smtc_shield_isp4520_init_led_tx( void );
 
 /**
  * @brief Initialize the GPIO driving the RX LED
  */
-void smtc_shield_sx126x_init_led_rx( void );
+void smtc_shield_isp4520_init_led_rx( void );
 
 /**
  * @brief De-initialize the GPIO driving the TX LED
  */
-void smtc_shield_sx126x_deinit_led_tx( void );
+void smtc_shield_isp4520_deinit_led_tx( void );
 
 /**
  * @brief De-initialize the GPIO driving the RX LED
  */
-void smtc_shield_sx126x_deinit_led_rx( void );
+void smtc_shield_isp4520_deinit_led_rx( void );
 
 /**
  * @brief Configure the GPIO to switch on the TX LED
  */
-void smtc_shield_sx126x_set_led_tx( void );
+void smtc_shield_isp4520_set_led_tx( void );
 
 /**
  * @brief Configure the GPIO to switch off the TX LED
  */
-void smtc_shield_sx126x_reset_led_tx( void );
+void smtc_shield_isp4520_reset_led_tx( void );
 
 /**
  * @brief Configure the GPIO to switch on the RX LED
  */
-void smtc_shield_sx126x_set_led_rx( void );
+void smtc_shield_isp4520_set_led_rx( void );
 
 /**
  * @brief Configure the GPIO to switch off the RX LED
  */
-void smtc_shield_sx126x_reset_led_rx( void );
+void smtc_shield_isp4520_reset_led_rx( void );
 
 #ifdef __cplusplus
 }
