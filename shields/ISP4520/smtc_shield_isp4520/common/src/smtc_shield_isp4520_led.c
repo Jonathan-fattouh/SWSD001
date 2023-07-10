@@ -53,42 +53,42 @@
 
 void smtc_shield_sx126x_init_led_tx( void )
 {
- //   hal_gpio_init_out( SMTC_LED_TX, HAL_GPIO_RESET );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_init_led_rx( void )
 {
-  //  hal_gpio_init_out( SMTC_LED_RX, HAL_GPIO_RESET );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_deinit_led_tx( void )
 {
-  //  hal_gpio_deinit( SMTC_LED_TX );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_deinit_led_rx( void )
 {
-  //  hal_gpio_deinit( SMTC_LED_RX );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_set_led_tx( void )
 {
-  //  hal_gpio_set_value( SMTC_LED_TX, HAL_GPIO_SET );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_reset_led_tx( void )
 {
-  //  hal_gpio_set_value( SMTC_LED_TX, HAL_GPIO_RESET );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_set_led_rx( void )
 {
- //   hal_gpio_set_value( SMTC_LED_RX, HAL_GPIO_SET );
+    // No LED implemented
 }
 
 void smtc_shield_sx126x_reset_led_rx( void )
 {
-  //  hal_gpio_set_value( SMTC_LED_RX, HAL_GPIO_RESET );
+    // No LED implemented
 }
 
 /*

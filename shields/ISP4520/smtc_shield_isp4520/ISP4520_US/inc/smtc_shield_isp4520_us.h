@@ -1,7 +1,7 @@
 /*!
- * @file      smtc_shield_sx1262mb1cbs.c
+ * @file      smtc_shield_isp4520_us.c
  *
- * @brief     Interface specific to SX1262MB1CBS shield
+ * @brief     Interface specific to ISP4520-US module
  *
  * The Clear BSD License
  * Copyright Semtech Corporation 2022. All rights reserved.

@@ -1,7 +1,7 @@
 /*!
- * @file      smtc_shield_sx1261mb1cas.c
+ * @file      smtc_shield_isp4520_as.c
  *
- * @brief     Implementation specific to SX1261MB1CAS shield
+ * @brief     Implementation specific to ISP4520-AS module
  *
  * The Clear BSD License
  * Copyright Semtech Corporation 2022. All rights reserved.
@@ -49,7 +49,7 @@
 #define ISP4520_AS_SUBGHZ_FREQ_MAX 960000000
 
 #define ISP4520_AS_MIN_PWR -17
-#define ISP4520_AS_MAX_PWR 15
+#define ISP4520_AS_MAX_PWR 14
 
 // PA config table
 const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_AS_MAX_PWR - ISP4520_AS_MIN_PWR + 1] = {

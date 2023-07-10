@@ -1,7 +1,7 @@
 /*!
- * @file      smtc_shield_sx1261mb1cas.c
+ * @file      smtc_shield_isp4520_as.c
  *
- * @brief     Interface specific to SX1261MB1CAS shield
+ * @brief     Interface specific to ISP4520-AS module
  *
  * The Clear BSD License
  * Copyright Semtech Corporation 2022. All rights reserved.

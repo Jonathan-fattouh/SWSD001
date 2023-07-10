@@ -1,5 +1,5 @@
 /*!
- * @file      smtc_shield_sx126x_ant_sw.c
+ * @file      smtc_shield_isp4520_ant_sw.c
  *
  * @brief     Implementation for functions driving antenna switch
  *
