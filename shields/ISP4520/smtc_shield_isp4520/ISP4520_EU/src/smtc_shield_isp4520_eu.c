@@ -53,304 +53,305 @@
 
 // PA config table
 const smtc_shield_sx126x_pa_pwr_cfg_t pa_cfg_table[ISP4520_EU_MAX_PWR - ISP4520_EU_MIN_PWR + 1] = {
-    {  // Expected output power = -17dBm
+    { // Expected output power = -17dBm
+        .power = -17,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -16dBm
+        .power = -16,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -15dBm
         .power = -15,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -16dBm
+    { // Expected output power = -14dBm
+        .power = -14,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -13dBm
         .power = -13,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -15dBm
+    { // Expected output power = -12dBm
         .power = -12,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -14dBm
-        .power = -12,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -13dBm
-        .power = -12,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = -12dBm
-        .power = -10,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
     { // Expected output power = -11dBm
-        .power = -10,
+        .power = -11,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x04,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
     { // Expected output power = -10dBm
-        .power = -7,
+        .power = -10,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
     { // Expected output power = -9dBm
+        .power = -9,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -8dBm
         .power = -8,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -8dBm
+    { // Expected output power = -7dBm
         .power = -7,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x03,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -7dBm
+    { // Expected output power = -6dBm
+        .power = -6,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -5dBm
         .power = -5,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -6dBm
+    { // Expected output power = -4dBm
         .power = -4,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -5dBm
+    { // Expected output power = -3dBm
         .power = -3,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -4dBm
+    { // Expected output power = -2dBm
+        .power = -2,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = -1dBm
+        .power = -1,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 0dBm
         .power = 0,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -3dBm
-        .power = 0,
+    { // Expected output power = 1dBm
+        .power = 1,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -2dBm
-        .power = 0,
+    { // Expected output power = 2dBm
+        .power = 2,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = -1dBm
+    { // Expected output power = 3dBm
         .power = 3,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 0dBm
-        .power = 3,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 1dBm
+    { // Expected output power = 4dBm
         .power = 4,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 2dBm
+    { // Expected output power = 5dBm
+        .power = 5,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 6dBm
         .power = 6,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 3dBm
-        .power = 6,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 4dBm
+    { // Expected output power = 7dBm
         .power = 7,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 5dBm
+    { // Expected output power = 8dBm
         .power = 8,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 6dBm
+    { // Expected output power = 9dBm
         .power = 9,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 7dBm
+    { // Expected output power = 10dBm
         .power = 10,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 8dBm
+    { // Expected output power = 11dBm
+        .power = 11,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 12dBm
+        .power = 12,
+        .pa_config = {
+            .hp_max        = 0x00,
+            .pa_duty_cycle = 0x06,
+            .device_sel    = 0x01,
+            .pa_lut        = 0x01,
+        },
+    },
+    { // Expected output power = 13dBm
         .power = 13,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 9dBm
+    { // Expected output power = 14dBm
         .power = 14,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x00,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
-    {// Expected output power = 10dBm
-        .power = 13,
+    { // Expected output power = 15dBm
+        .power = 15,
         .pa_config = {
             .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-     },
-    {// Expected output power = 11dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x01,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 12dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x02,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 13dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x04,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-     },
-    {// Expected output power = 14dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x05,
-            .device_sel    = 0x01,
-            .pa_lut        = 0x01,
-        },
-    },
-    {// Expected output power = 15dBm
-        .power = 14,
-        .pa_config = {
-            .hp_max        = 0x00,
-            .pa_duty_cycle = 0x07,
+            .pa_duty_cycle = 0x06,
             .device_sel    = 0x01,
             .pa_lut        = 0x01,
         },
     },
 };
+
 
 /*
  * -----------------------------------------------------------------------------
