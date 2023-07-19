@@ -27,8 +27,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 # Determine the Host Target mk file to include based on TARGE_MCU
-ifeq ($(TARGET_MCU),STM32L476xx)
+ifeq ($(TARGET_MCU), STM32L476xx)
 TARGET_MAKEFILE = $(TOP_DIR)/host_driver/STMicroelectronics/STM32L4xx/stm32l4xx.mk
+else ifeq ($(TARGET_MCU), nRF52832)
+TARGET_MAKEFILE = $(TOP_DIR)/host_driver/NordicSemi/nRF52832.mk
 else
 $(error Invalid target MCU, please select a support target MCU)
 endif

@@ -29,6 +29,12 @@
 # Determine TARGET_MCU based on MCU_BOARD
 ifeq ($(MCU_BOARD), NUCLEO_L476RG)
 TARGET_MCU ?= STM32L476xx
+else ifeq ($(MCU_BOARD), ISP4520_EU)
+TARGET_MCU ?= nRF52832
+else ifeq ($(MCU_BOARD), ISP4520_AS)
+TARGET_MCU ?= nRF52832
+else ifeq ($(MCU_BOARD), ISP4520_US)
+TARGET_MCU ?= nRF52832
 else
 $(error Invalid target board, please select a supported target board)
 endif
@@ -36,6 +42,8 @@ endif
 # Determine the MCU mk file to include based on TARGET_MCU
 ifeq ($(TARGET_MCU),STM32L476xx)
 SMTC_HAL_MAKEFILE = $(TOP_DIR)/smtc_hal/STMicroelectronics/STM32L4xx/smtc_hal_l4.mk
+else ifeq ($(TARGET_MCU), nRF52832)
+SMTC_HAL_MAKEFILE = $(TOP_DIR)/smtc_hal/NordicSemi/nRF52832/smtc_hal_nrf.mk
 else
 $(error Invalid target MCU, please select a supported target MCU)
 endif

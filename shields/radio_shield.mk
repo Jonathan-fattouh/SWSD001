@@ -32,7 +32,9 @@ C_INCLUDES +=  \
 -I$(TOP_DIR)/shields/interface \
 -I$(TOP_DIR)/shields/common
 
-ifneq (,$(findstring LR11,$(RADIO_BOARD)))
+ifneq (,$(findstring ISP4520,$(RADIO_BOARD)))
+PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/ISP4520/isp4520.mk
+else ifneq (,$(findstring LR11,$(RADIO_BOARD)))
 PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/LR11XX/lr11xx.mk
 else ifneq (,$(findstring SX126,$(RADIO_BOARD)))
 PLATFORM_BOARD_MAKEFILE = $(TOP_DIR)/shields/SX126X/sx126x.mk

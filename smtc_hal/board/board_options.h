@@ -43,6 +43,15 @@ extern "C" {
 #ifdef NUCLEO_L476RG
 #include "nucleo_l476rg/nucleo_l476rg_board_options.h"
 #include "nucleo_l476rg/nucleo_l476rg_pinout_mapping.h"
+#elif ISP4520_EU
+#include "isp4520_tb/isp4520_tb_board_options.h"
+#include "isp4520_tb/isp4520_tb_pinout_mapping.h"
+#elif ISP4520_US
+#include "isp4520_tb/isp4520_tb_board_options.h"
+#include "isp4520_tb/isp4520_tb_pinout_mapping.h"
+#elif ISP4520_AS
+#include "isp4520_tb/isp4520_tb_board_options.h"
+#include "isp4520_tb/isp4520_tb_pinout_mapping.h"
 #else
 #error "Unknown board"
 #endif  // BOARD
